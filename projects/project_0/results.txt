@@ -209,21 +209,9 @@ h.
 
 i.
 
-V. 
+V.
 
-#include <stdio.h>
-int main(void) {
-	int high=160,step=5,F,C=-40;
-	while(C <= high)
-	{
-		F=32+9*C/5;
-		printf("%6d %10.2f %6d %10.2f \n", C,C+273.15,F,F+459.67);
-		C=C+step;
-	}
-	return(0);
-}
-
-Outputs:
+Initial Output:
    -40     233.15    -40     419.67 
    -35     238.15    -31     428.67 
    -30     243.15    -22     437.67 
@@ -267,9 +255,24 @@ Outputs:
    160     433.15    320     779.67 
 
 
-Blah Blah
+The program calculates the temperature from Celsius to Fahrenheit, Kelvin, and Rankine. It does so for values from -40C to the specified max value of C (high) in specified increments (step).
 
-     C   C+273.15      F   F+459.67
+#include <stdio.h>
+int main(void) {
+	int high=160,step=2,F,C=-40;
+	printf("     C          K      F          R\n");
+	while(C <= high)
+	{
+		F=32+9*C/5;
+		printf("%6d %10.2f %6.1f %10.2f \n", C,C+273.15,(float)F,F+459.67);
+		C=C+step;
+	}
+	return(0);
+}
+
+The output given by the above (changed) code is given below:
+
+     C          K      F          R
    -40     233.15  -40.0     419.67 
    -38     235.15  -36.0     423.67 
    -36     237.15  -32.0     427.67 
@@ -372,5 +375,22 @@ Blah Blah
    158     431.15  316.0     775.67 
    160     433.15  320.0     779.67
 
+VI.
 
+#include <stdio.h>
+int main(void) {
+	double a1,a0;
+	printf("enter coefficients of Linear Equation a1*x+a0=0\n");
+	printf("in the order a1,a0, seperated by spaces\n");
+	scanf("%lf %lf",&a1,&a0);
+	if (a1==0){
+		if (a0==0){
+			printf("a1=a0=0 so the equation is true for all x\n");
+		} else{
+			printf("a1=0 and a0!=0 so the equation is contradictory\n");
+		} return(0);
+	} printf("The Solution is x = %.2f \n", -a0/a1);
+	return(0);
+}
 
+If you don’t treat the special case where a1=0 then you get a result of nan for a0=0 and inf for a0!=0
