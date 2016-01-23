@@ -10,6 +10,6 @@ int main(void) {
 		} else{
 			printf("a1=0 and a0!=0 so the equation is contradictory\n");
 		} return(0);
-	} printf("The Solution is x = %.2f \n", -a0/a1);
+	} printf("The Solution up to 2 decimal places is x = %.2f \n", -a0/a1);
 	return(0);
 }

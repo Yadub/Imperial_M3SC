@@ -2,78 +2,90 @@ Project 0
 09/01/2016
 Yadu Bhageria
 00733164
-
+____________________
 I.a.
 
-For /n:
+#include <stdio.h>
+
+int main(void) {
+	printf(“Hello World!“);
+	return(0);
+}
+
+Without changing:
+Hello World!
+
+i. For \n:
 Hello
 World!
 \n places a new line between the words
 
-For \t:
+ii. For \t:
 Hello	World!
 \t places a tab between the words
 
-For \v:
+iii. For \v:
 Hello
      World!
 \v places a “vertical tab” between the words. That is a new line and “World” starts on the column after the column where “Hello” ends
 
-For \b:
+iv. For \b:
 HellWorld!
-\b outputs a backspace after “Hello” which causes the “o” to be deleted
+\b outputs a backspace after “Hello” which causes the “o” to be deleted and “World!” to start after “Hell”
 
-For \r:
+v. For \r:
 World!
-\r places a carriage return between the characters. That is deleting everything and starting from the beginning of the line
+\r places a ‘carriage return’ between the characters, i.e. deleting everything and starting from the beginning of the line
 
-For \f:
+vi. For \f:
 Hello
      World!
-\f places a “formfeed” between the words. That is it causes a page to be printed which in this case just moves the output to the next line (similar to \v)
+\f places a “formfeed” between the words, i.e. it causes a page to be printed which in this case just moves the output to the next line (same output here as \v)
 
-For \a:
+vii. For \a:
 HelloWorld!
 \a causes the system to beep
 
-For \\:
+viii. For \\:
 Hello\World!
 \\ outputs the character \
 
-For \?:
+ix. For \?:
 Hello?World!
 \? outputs the character ?
 
-For \’:
+x. For \’:
 Hello’World!
 \’ outputs the character ‘
 
-For \”:
+xi. For \”:
 Hello”World!
 \” outputs the character “
 
 Note: There are no changes by using a different compiler as C is standardised with ISO C characters.
 
+____________________
 I.b.
 
 #include <stdio.h>
 
 int main(void) {
-printf("         Name: <Bhageria, Yadu>\n          CID: <00733164>\n   LIBRARY NO: <0246618471>\nEmail Address: <yrb13@ic.ac.uk>\n  Course Code: <M3SC>");
-return(0);
+	printf("         Name: <Bhageria, Yadu>\n          CID: <00733164>\n   LIBRARY NO: <0246618471>\nEmail Address: <yrb13@ic.ac.uk>\n  Course Code: <M3SC>");
+	return(0);
 }
 
+Outputs:
          Name: <Bhageria, Yadu>
           CID: <00733164>
    LIBRARY NO: <0246618471>
 Email Address: <yrb13@ic.ac.uk>
   Course Code: <M3SC>
 
+____________________
 II.
 
 #include <stdio.h>
-int main(void) 
-{
+int main(void) {
 	int i1=4, i2=11111, i3=777777777;
 	float x1=2.0,x2=2.4048255576957728,x3=6.02214e23;
 	printf("i1, i2, i3 = %d %d %d \n",i1,i2,i3);
@@ -81,60 +93,70 @@ int main(void)
 	return(0);
 }
 
-Output:
+Outputs:
 i1, i2, i3 = 4 11111 777777777 
 x1, x2, x3 = 2.000000 2.404825 602213992297390856470528.000000 
+Firstly, the value of x2 has been rounded, to 6 decimal places, down to 2.404825 instead of being rounded up to 2.404826 .
+Secondly, x3 is displayed to 6 decimal places and so has been outputted with a higher value than the inputted value.
+
 
 a. with %8d instead of %d:
 i1, i2, i3 =        4    11111 777777777 
 x1, x2, x3 = 2.000000 2.404825 602213992297390856470528.000000
-%8d uses at least 8 spaces for the output. If the digit is smaller then it fills the unused space with spaces before the number and if its longer then it outputs the entire number.
+%8d uses at least 8 spaces for the output. If the digit is smaller then it fills the unused space with empty spaces before the number and if it is longer then it outputs the entire number.
 
 b. with %4d instead of %d:
 i1, i2, i3 =    4 11111 777777777 
 x1, x2, x3 = 2.000000 2.404825 602213992297390856470528.000000 
-same as with %8d but with 4 spaces instead of 8.
+same as with %8d but with a minimum of 4 spaces instead of 8.
 
 c. with %e instead of %f:
 i1, i2, i3 = 4 11111 777777777 
 x1, x2, x3 = 2.000000e+00 2.404825e+00 6.022140e+23 
-%e makes the numbers output as standard form
+%e makes the numbers output as standard form, i.e. y*10^z, with y rounded 6 decimal places and e representing 10^ .
 
 d. with %E instead of %f:
 i1, i2, i3 = 4 11111 777777777 
 x1, x2, x3 = 2.000000E+00 2.404825E+00 6.022140E+23 
-again outputs in standard form and makes the “e” in the standard form capitalised to “E”
+again outputs in standard form and makes the “e” in the standard form capitalised to “E”.
 
 e. with %g instead of %f:
 i1, i2, i3 = 4 11111 777777777 
 x1, x2, x3 = 2 2.40483 6.02214e+23 
-%g specifics the significant figures to be outputted. If this is not specified then 6 is used a default value. If the number is greater than 6 digits then standard form is used. Trailing zeros are removed from the fractional part of the result and decimals only appear if there is at least 1 non zero value part the decimal
+%g specifics the significant figures to be outputted. If a number is not specified then 6 is used as a default value. If the digit being outputted is greater than 6 digits then standard form is used. Trailing zeros are removed from the fractional part of the result and decimals only appear if there is at least 1 non zero value part the decimal within the significant portion of the output.
 
 f. with %10.2g instead of %f:
 i1, i2, i3 = 4 11111 777777777 
 x1, x2, x3 =          2        2.40482544899      6e+23 
 in %10.2g(/%20.12g) the 10(/20) specifies the amount of space to be used for each output (as with %8d) and the .2(/.12) specifies the number of significant figures to be used. 
 
-with double instead of float:
+With double instead of float:
 i1, i2, i3 = 4 11111 777777777 
 x1, x2, x3 = 2.000000 2.404826 602213999999999969067008.000000 
-Double allocated double the number of bits to store the value. The output becomes more accurate.
+Double allocated double the number of bits (64bits instead of 32bits) to store the values of x1,x2, and x3. The output becomes more accurate as we can see that x2 is now rounded up and the outputted x3 is much closer to the inputted value of x3.
 
+There is no difference when using a different C compiler as all the code has been of ISO C standard.
+
+____________________
 III.
 
+2^16 = 65536
+2^32 = 4294967296
+2^64 = 1.8446744e+19
+
 #include <stdio.h>
-int main(void) 
-{
+int main(void) {
 	short i1=44,i2=55,i3;
 	i3=i1+i2;
 	printf("i1, i2, i3 = %d %d %d \n", i1,i2,i3);
 	return(0);
 }
 
+Outputs:
 i1, i2, i3 = 44 55 99
 
 a. 
-i1, i2, i3 = 44 55 0 
+i1, i2, i3 = 44 55 2420 
 Yes, this is expected. i1 and i2 multiply.
 
 b. 
@@ -143,25 +165,26 @@ Yes, this is expected. i1/i2 is smaller than 1 which rounds down to its integer 
 
 c.
 i1, i2, i3 = 44 55 1 
-Yes, this is expected. i2/i1 is greater than 1 and smaller than 2 so it rounds down to the integer component of 1
+Yes, this is expected. i2/i1 is greater than 1 and smaller than 2 so it rounds down to its integer component of 1.
 
 d. 
 i1, i2, i3 = -21092 -9981 -31073
-Yes, this is expected. 2^16 is 65536 and 44444-2^16=-21092, 55555-2^16=-9981 and i1+i2=99999 and -31073=99999-2^16. Short means our outputs are in a ring of value 2^16. 
+Yes, this is expected. Short variables are stored in 16bits so up to a value of 2^15-1. All values greater than this are subtracted by 2^16 until they are smaller than 2^15, i.e. ‘clock’ arithmetic’. So, 44444-2^16=-21092, 55555-2^16=-9981. For i3, the computer deals with the i1 and i2 as they are stored, which is the outputted result of -9981 and -21091. So i1+i2 = -21092+(-9981) = -31073>-2^15 so a valid output. Note that 99999-2^16 = 34463 > 2^15 so 34463–2^16 = -31073.
 
 For new values i1=44444, i2=55555:
 e.
 i1, i2, i3 = -21092 -9981 17620 
-44444-2^16=-21092, 55555-2^16=-9981 and 44444*55555-(37675*2^16) = 17620
+i1 and i2 are the same as before. In the case of i3,-9981*-21091 = 210509271 and 210509271-(3212*2^16) = 17620. i.e. we multiply i1 and i2 and keep subtracting 2^16 (3212 times) until the value is smaller than 2^15.
 
 f.
 i1, i2, i3 = -21092 -9981 2 
-44444-2^16=-21092, 55555-2^16=-9981 and -9981 goes into -21091 twice so outputs 2
+Again for i3, -9981 goes into -21091 twice and thus the output is 2. i.e. -21091/-9981 = 2.11 which is reduced to its integer component of 2.
 
 g.
 i1, i2, i3 = -21092 -9981 0 
-44444-2^16=-21092, 55555-2^16=-9981 and -21092 goes into -9981 zero times so outputs 0
+Similarly as f., -21092 goes into -9981 zero times so the output is 0. i.e. -9981/-21091 = 0.47 which is reduced to its integer component of 0.
 
+____________________
 IV.
 
 2^-24 = 5.96 x 10^-8
@@ -169,46 +192,58 @@ IV.
 2^-113 = 9.63 x 10^-35
 
 #include <stdio.h>
-int main(void) 
-{
+int main(void) {
 	float x1=1.0e6,x2=2.4048255576957728,x3;
+	/* float x1=6.02214e23,x2=3.e17,x3; */
 	x3=x1+x2;
 	printf("x1, x2, x3 = %f %f %f \n", x1,x2,x3);
 	return(0);
 }
 
 x1, x2, x3 = 1000000.000000 2.404825 1000002.375000 
-Yes, this is expected. x3 is calculated to an accuracy of 7-8 significant figures as 24 bits are used for storing the significand. We can note this by seeing the sum, 1000002.4048255, rounded down to 7-8 significant figures is equal to the value here.
+Yes, this is expected. x1 is stored correctly. x2 is calculated to an accuracy of 2^-24 which is equal to 5.96 x 10^-8, so roughly 7-8 significant figures as 24 bits are used for storing the significand. i.e. x2 = 2.40482545. Here we are seeing our results rounded to 6 decimal places to it is outputted as 2.404825.
+For x3, the sum, x1+x2, is equal to 1000002.4048255. This is rounded down to the precision of 2^-24, 7-8 significant figures, which is equal to 1000002.375000.
 
 a.
 x1, x2, x3 = 1000000.000000 2.404825 2404825.500000 
-Yes, this is expected. x3 is calculated to 7-8 significant figures precision. 2.4048255576957728 truncated to 7-8 significant figures and multiplied by 1^6 which is the value outputted with the default of 6 decimal places for %f
+Yes, this is expected. x3 is calculated to 7-8 significant figures precision. 2.40482545 multiplied by 1^6 is 2404825.500000 to a precision of 2^24 for the significand. The value outputted is with the default of 6 decimal places for %f.
 
 b.
 x1, x2, x3 = 1000000.000000 2.404825 415830.593750 
-Yes, this is expected. Again 2.4048255576957728 truncated to 7-8 significant figures and then 1000000.0 / 2.4048255 = 415830.587292 which is again truncated to 415830.593750 
+Yes, this is expected. 1000000.0 / 2.4048255 = 415830.587292 which is again truncated to 415830.593750 to a precision of 5.96 x 10^-8 and displayed with 6 decimal places.
 
 c.
 x1, x2, x3 = 1000000.000000 2.404825 0.000002
-Yes, this is expected. Similar as above but when we divide  2.4048255 / 1000000.0 = 0.00000240482 which is truncated down to 0.000002 due to the default of 6 decimal places for %f
+Yes, this is expected. Similar as above. 2.40482545 / 1000000.0 = 0.0000024 which is truncated down to 0.000002 due to the default of 6 decimal places for %f
 
 d.
-Doesn’t compile. modulo in gcc doesn’t work with floats. 
+Doesn’t compile. modulo in c doesn’t work with floats.
+The error:
+prog_4.c: In function ‘main’:
+prog_4.c:5:7: error: invalid operands to binary % (have ‘float’ and ‘float’)
+  x3=x2%x1;
+       ^
 
 e. 
 x1, x2, x3 = 602213992297390856470528.000000 299999995292024832.000000 602214280527767008182272.000000
-x1 and x2 are accurate to between 7-8 significant figures. x3 works by adding 602213992297390856470528.000000 to 299999995292024832.000000 which gives 602214280527767008182272.000000 to 7-8 significant figures. 
+x1 and x2 are accurate to 7-8 significant figures (5.96 x 10^-8). x3 works by adding 602213992297390856470528.000000 to 299999995292024832.000000 which gives 602214280527767008182272.000000.
 
 f.
 x1, x2, x3 = 602213992297390856470528.000000 299999995292024832.000000 inf 
-Yes, this is expected 
+Yes, this is expected. x1*x2 ~ 1.8*10^41 > 2^24 so is too large to store in a single precision floating point.
 
 g. 
+x1, x2, x3 = 602213992297390856470528.000000 299999995292024832.000000 2007380.000000 
+Yes, this is expected. 602213992297390856470528/299999995292024832 = 2007380.00583 which is outputted correct to a precision of 2^-24 (7-8 significant figures) for the significand.
 
 h.
+x1, x2, x3 = 602213992297390856470528.000000 299999995292024832.000000 0.000000
+Yes, this is expected. 299999995292024832/602213992297390856470528 = 4.98*10^-7 which rounded for 6 decimal places is just 0. 
 
 i.
+Doesn’t compile (same error as part e.). modulo in c doesn’t work with floats.
 
+____________________
 V.
 
 Initial Output:
@@ -261,13 +296,11 @@ The program calculates the temperature from Celsius to Fahrenheit, Kelvin, and R
 int main(void) {
 	int high=160,step=2,F,C=-40;
 	printf("     C          K      F          R\n");
-	while(C <= high)
-	{
+	while(C <= high){
 		F=32+9*C/5;
 		printf("%6d %10.2f %6.1f %10.2f \n", C,C+273.15,(float)F,F+459.67);
 		C=C+step;
-	}
-	return(0);
+	} return(0);
 }
 
 The output given by the above (changed) code is given below:
@@ -375,6 +408,7 @@ The output given by the above (changed) code is given below:
    158     431.15  316.0     775.67 
    160     433.15  320.0     779.67
 
+____________________
 VI.
 
 #include <stdio.h>
@@ -389,8 +423,14 @@ int main(void) {
 		} else{
 			printf("a1=0 and a0!=0 so the equation is contradictory\n");
 		} return(0);
-	} printf("The Solution is x = %.2f \n", -a0/a1);
+	} printf("The Solution up to 2 decimal places is x = %.2f \n", -a0/a1);
 	return(0);
 }
 
-If you don’t treat the special case where a1=0 then you get a result of nan for a0=0 and inf for a0!=0
+Running for a1=100 and a2=67:
+enter coefficients of Linear Equation a1*x+a0=0
+in the order a1,a0, seperated by spaces
+100 67
+The Solution up to 2 decimal places is x = -0.67 
+
+If you don’t treat the special case where a1=0 then you get a result of nan for a0=0 (0/0) and inf for a0!=0 (a0/0).
