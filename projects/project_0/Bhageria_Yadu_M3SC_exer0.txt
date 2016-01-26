@@ -1,0 +1,528 @@
+Project 0
+Date Started: 09/01/2016
+Name: Yadu Bhageria
+CID: 00733164
+____________________
+I.a.
+
+#include <stdio.h>
+int main(void) {
+	printf(“Hello\aWorld!“);
+	return(0);
+}
+
+Without changing:
+Hello World!
+
+i. For \n:
+Hello
+World!
+\n places a new line between the words
+
+ii. For \t:
+Hello	World!
+\t places a tab between the words
+
+iii. For \v:
+Hello
+     World!
+\v places a “vertical tab” between the words. That is a new line and “World” starts on the column after the column where “Hello” ends
+
+iv. For \b:
+HellWorld!
+\b outputs a backspace after “Hello” which causes the “o” to be deleted and “World!” to start after “Hell”
+
+v. For \r:
+World!
+\r places a ‘carriage return’ between the characters, i.e. deleting everything and starting from the beginning of the line
+
+vi. For \f:
+Hello
+     World!
+\f places a “formfeed” between the words, i.e. it causes a page to be printed which in this case just moves the output to the next line (same output here as \v)
+
+vii. For \a:
+HelloWorld!
+\a causes the system to beep
+
+viii. For \\:
+Hello\World!
+\\ outputs the character \
+
+ix. For \?:
+Hello?World!
+\? outputs the character ?
+
+x. For \’:
+Hello’World!
+\’ outputs the character ‘
+
+xi. For \”:
+Hello”World!
+\” outputs the character “
+
+Note: There are no changes by using a different compiler as C is standardised with ISO C characters.
+
+____________________
+I.b.
+
+#include <stdio.h>
+int main(void) {
+	printf("         Name: <Bhageria, Yadu>\n          CID: <00733164>\n   LIBRARY NO: <0246618471>\nEmail Address: <yrb13@ic.ac.uk>\n  Course Code: <M3SC>");
+	return(0);
+}
+
+Outputs:
+         Name: <Bhageria, Yadu>
+          CID: <00733164>
+   LIBRARY NO: <0246618471>
+Email Address: <yrb13@ic.ac.uk>
+  Course Code: <M3SC>
+
+____________________
+II.
+
+#include <stdio.h>
+int main(void) {
+	int i1=4, i2=11111, i3=777777777;
+	float x1=2.0,x2=2.4048255576957728,x3=6.02214e23;
+	printf("i1, i2, i3 = %d %d %d \n",i1,i2,i3);
+	printf("x1, x2, x3 = %f %f %f \n",x1,x2,x3);
+	return(0);
+}
+
+Outputs:
+i1, i2, i3 = 4 11111 777777777 
+x1, x2, x3 = 2.000000 2.404825 602213992297390856470528.000000 
+Firstly, the value of x2 has been rounded, to 6 decimal places, down to 2.404825 instead of being rounded up to 2.404826 .
+Secondly, x3 is displayed to 6 decimal places and so has been outputted with a higher value than the inputted value.
+
+
+a. with %8d instead of %d:
+i1, i2, i3 =        4    11111 777777777 
+x1, x2, x3 = 2.000000 2.404825 602213992297390856470528.000000
+%8d uses at least 8 spaces for the output. If the digit is smaller then it fills the unused space with empty spaces before the number and if it is longer then it outputs the entire number.
+
+b. with %4d instead of %d:
+i1, i2, i3 =    4 11111 777777777 
+x1, x2, x3 = 2.000000 2.404825 602213992297390856470528.000000 
+same as with %8d but with a minimum of 4 spaces instead of 8.
+
+c. with %e instead of %f:
+i1, i2, i3 = 4 11111 777777777 
+x1, x2, x3 = 2.000000e+00 2.404825e+00 6.022140e+23 
+%e makes the numbers output as standard form, i.e. y*10^z, with y rounded 6 decimal places and e representing 10^ .
+
+d. with %E instead of %f:
+i1, i2, i3 = 4 11111 777777777 
+x1, x2, x3 = 2.000000E+00 2.404825E+00 6.022140E+23 
+again outputs in standard form and makes the “e” in the standard form capitalised to “E”.
+
+e. with %g instead of %f:
+i1, i2, i3 = 4 11111 777777777 
+x1, x2, x3 = 2 2.40483 6.02214e+23 
+%g specifics the significant figures to be outputted. If a number is not specified then 6 is used as a default value. If the digit being outputted is greater than 6 digits then standard form is used. Trailing zeros are removed from the fractional part of the result and decimals only appear if there is at least 1 non zero value part the decimal within the significant portion of the output.
+
+f. with %10.2g instead of %f:
+i1, i2, i3 = 4 11111 777777777 
+x1, x2, x3 =          2        2.40482544899      6e+23 
+in %10.2g(/%20.12g) the 10(/20) specifies the amount of space to be used for each output (as with %8d) and the .2(/.12) specifies the number of significant figures to be used. 
+
+With double instead of float:
+i1, i2, i3 = 4 11111 777777777 
+x1, x2, x3 = 2.000000 2.404826 602213999999999969067008.000000 
+Double allocated double the number of bits (64bits instead of 32bits) to store the values of x1,x2, and x3. The output becomes more accurate as we can see that x2 is now rounded up and the outputted x3 is much closer to the inputted value of x3.
+
+There is no difference when using a different C compiler as all the code has been of ISO C standard.
+
+____________________
+III.
+
+2^16 = 65536
+2^32 = 4294967296
+2^64 = 1.8446744e+19
+
+#include <stdio.h>
+int main(void) {
+	short i1=44,i2=55,i3;
+	i3=i1+i2;
+	printf("i1, i2, i3 = %d %d %d \n", i1,i2,i3);
+	return(0);
+}
+
+Outputs:
+i1, i2, i3 = 44 55 99
+
+a. 
+i1, i2, i3 = 44 55 2420 
+Yes, this is expected. i1 and i2 multiply.
+
+b. 
+i1, i2, i3 = 44 55 0 
+Yes, this is expected. i1/i2 is smaller than 1 which rounds down to its integer value of 0.
+
+c.
+i1, i2, i3 = 44 55 1 
+Yes, this is expected. i2/i1 is greater than 1 and smaller than 2 so it rounds down to its integer component of 1.
+
+d. 
+i1, i2, i3 = -21092 -9981 -31073
+Yes, this is expected. Short variables are stored in 16bits so up to a value of 2^15-1. All values greater than this are subtracted by 2^16 until they are smaller than 2^15, i.e. ‘clock’ arithmetic’. So, 44444-2^16=-21092, 55555-2^16=-9981. For i3, the computer deals with the i1 and i2 as they are stored, which is the outputted result of -9981 and -21091. So i1+i2 = -21092+(-9981) = -31073>-2^15 so a valid output. Note that 99999-2^16 = 34463 > 2^15 so 34463–2^16 = -31073.
+
+For new values i1=44444, i2=55555:
+e.
+i1, i2, i3 = -21092 -9981 17620 
+i1 and i2 are the same as before. In the case of i3,-9981*-21091 = 210509271 and 210509271-(3212*2^16) = 17620. i.e. we multiply i1 and i2 and keep subtracting 2^16 (3212 times) until the value is smaller than 2^15.
+
+f.
+i1, i2, i3 = -21092 -9981 2 
+Again for i3, -9981 goes into -21091 twice and thus the output is 2. i.e. -21091/-9981 = 2.11 which is reduced to its integer component of 2.
+
+g.
+i1, i2, i3 = -21092 -9981 0 
+Similarly as f., -21092 goes into -9981 zero times so the output is 0. i.e. -9981/-21091 = 0.47 which is reduced to its integer component of 0.
+
+____________________
+IV.
+
+2^-24 = 5.96 x 10^-8
+2^-52 = 1.11 x 10^-16
+2^-113 = 9.63 x 10^-35
+
+#include <stdio.h>
+int main(void) {
+	float x1=1.0e6,x2=2.4048255576957728,x3;
+	/* float x1=6.02214e23,x2=3.e17,x3; */
+	x3=x1+x2;
+	printf("x1, x2, x3 = %f %f %f \n", x1,x2,x3);
+	return(0);
+}
+
+x1, x2, x3 = 1000000.000000 2.404825 1000002.375000 
+Yes, this is expected. x1 is stored correctly. x2 is calculated to an accuracy of 2^-24 which is equal to 5.96 x 10^-8, so roughly 7-8 significant figures as 24 bits are used for storing the significand. i.e. x2 = 2.40482545. Here we are seeing our results rounded to 6 decimal places to it is outputted as 2.404825.
+For x3, the sum, x1+x2, is equal to 1000002.4048255. This is rounded down to the precision of 2^-24, 7-8 significant figures, which is equal to 1000002.375000.
+
+a.
+x1, x2, x3 = 1000000.000000 2.404825 2404825.500000 
+Yes, this is expected. x3 is calculated to 7-8 significant figures precision. 2.40482545 multiplied by 1^6 is 2404825.500000 to a precision of 2^24 for the significand. The value outputted is with the default of 6 decimal places for %f.
+
+b.
+x1, x2, x3 = 1000000.000000 2.404825 415830.593750 
+Yes, this is expected. 1000000.0 / 2.4048255 = 415830.587292 which is again truncated to 415830.593750 to a precision of 5.96 x 10^-8 and displayed with 6 decimal places.
+
+c.
+x1, x2, x3 = 1000000.000000 2.404825 0.000002
+Yes, this is expected. Similar as above. 2.40482545 / 1000000.0 = 0.0000024 which is truncated down to 0.000002 due to the default of 6 decimal places for %f
+
+d.
+Doesn’t compile. modulo in c doesn’t work with floats.
+The error:
+prog_4.c: In function ‘main’:
+prog_4.c:5:7: error: invalid operands to binary % (have ‘float’ and ‘float’)
+  x3=x2%x1;
+       ^
+
+e. 
+x1, x2, x3 = 602213992297390856470528.000000 299999995292024832.000000 602214280527767008182272.000000
+x1 and x2 are accurate to 7-8 significant figures (5.96 x 10^-8). x3 works by adding 602213992297390856470528.000000 to 299999995292024832.000000 which gives 602214280527767008182272.000000.
+
+f.
+x1, x2, x3 = 602213992297390856470528.000000 299999995292024832.000000 inf 
+Yes, this is expected. x1*x2 ~ 1.8*10^41 > 2^24 so is too large to store in a single precision floating point.
+
+g. 
+x1, x2, x3 = 602213992297390856470528.000000 299999995292024832.000000 2007380.000000 
+Yes, this is expected. 602213992297390856470528/299999995292024832 = 2007380.00583 which is outputted correct to a precision of 2^-24 (7-8 significant figures) for the significand.
+
+h.
+x1, x2, x3 = 602213992297390856470528.000000 299999995292024832.000000 0.000000
+Yes, this is expected. 299999995292024832/602213992297390856470528 = 4.98*10^-7 which rounded for 6 decimal places is just 0. 
+
+i.
+Doesn’t compile (same error as part e.). modulo in c doesn’t work with floats.
+
+____________________
+V.
+
+Initial Output:
+   -40     233.15    -40     419.67 
+   -35     238.15    -31     428.67 
+   -30     243.15    -22     437.67 
+   -25     248.15    -13     446.67 
+   -20     253.15     -4     455.67 
+   -15     258.15      5     464.67 
+   -10     263.15     14     473.67 
+    -5     268.15     23     482.67 
+     0     273.15     32     491.67 
+     5     278.15     41     500.67 
+    10     283.15     50     509.67 
+    15     288.15     59     518.67 
+    20     293.15     68     527.67 
+    25     298.15     77     536.67 
+    30     303.15     86     545.67 
+    35     308.15     95     554.67 
+    40     313.15    104     563.67 
+    45     318.15    113     572.67 
+    50     323.15    122     581.67 
+    55     328.15    131     590.67 
+    60     333.15    140     599.67 
+    65     338.15    149     608.67 
+    70     343.15    158     617.67 
+    75     348.15    167     626.67 
+    80     353.15    176     635.67 
+    85     358.15    185     644.67 
+    90     363.15    194     653.67 
+    95     368.15    203     662.67 
+   100     373.15    212     671.67 
+   105     378.15    221     680.67 
+   110     383.15    230     689.67 
+   115     388.15    239     698.67 
+   120     393.15    248     707.67 
+   125     398.15    257     716.67 
+   130     403.15    266     725.67 
+   135     408.15    275     734.67 
+   140     413.15    284     743.67 
+   145     418.15    293     752.67 
+   150     423.15    302     761.67 
+   155     428.15    311     770.67 
+   160     433.15    320     779.67 
+
+
+The program calculates the temperature from Celsius to Fahrenheit, Kelvin, and Rankine. It does so for values from -40C to the specified max value of C (high) in specified increments (step).
+
+#include <stdio.h>
+int main(void) {
+	int high=160,step=2,F,C=-40;
+	printf("     C          K         F          R\n");
+	while(C <= high){
+		F=32+9*C/5;
+		printf("%6d %10.2f %9.1f %10.2f \n", C,C+273.15,(float)F,F+459.67);
+		C=C+step;
+	}
+	return(0);
+}
+
+The output given by the above (changed) code is given below:
+
+     C          K         F          R
+   -40     233.15     -40.0     419.67 
+   -38     235.15     -36.0     423.67 
+   -36     237.15     -32.0     427.67 
+   -34     239.15     -29.0     430.67 
+   -32     241.15     -25.0     434.67 
+   -30     243.15     -22.0     437.67 
+   -28     245.15     -18.0     441.67 
+   -26     247.15     -14.0     445.67 
+   -24     249.15     -11.0     448.67 
+   -22     251.15      -7.0     452.67 
+   -20     253.15      -4.0     455.67 
+   -18     255.15       0.0     459.67 
+   -16     257.15       4.0     463.67 
+   -14     259.15       7.0     466.67 
+   -12     261.15      11.0     470.67 
+   -10     263.15      14.0     473.67 
+    -8     265.15      18.0     477.67 
+    -6     267.15      22.0     481.67 
+    -4     269.15      25.0     484.67 
+    -2     271.15      29.0     488.67 
+     0     273.15      32.0     491.67 
+     2     275.15      35.0     494.67 
+     4     277.15      39.0     498.67 
+     6     279.15      42.0     501.67 
+     8     281.15      46.0     505.67 
+    10     283.15      50.0     509.67 
+    12     285.15      53.0     512.67 
+    14     287.15      57.0     516.67 
+    16     289.15      60.0     519.67 
+    18     291.15      64.0     523.67 
+    20     293.15      68.0     527.67 
+    22     295.15      71.0     530.67 
+    24     297.15      75.0     534.67 
+    26     299.15      78.0     537.67 
+    28     301.15      82.0     541.67 
+    30     303.15      86.0     545.67 
+    32     305.15      89.0     548.67 
+    34     307.15      93.0     552.67 
+    36     309.15      96.0     555.67 
+    38     311.15     100.0     559.67 
+    40     313.15     104.0     563.67 
+    42     315.15     107.0     566.67 
+    44     317.15     111.0     570.67 
+    46     319.15     114.0     573.67 
+    48     321.15     118.0     577.67 
+    50     323.15     122.0     581.67 
+    52     325.15     125.0     584.67 
+    54     327.15     129.0     588.67 
+    56     329.15     132.0     591.67 
+    58     331.15     136.0     595.67 
+    60     333.15     140.0     599.67 
+    62     335.15     143.0     602.67 
+    64     337.15     147.0     606.67 
+    66     339.15     150.0     609.67 
+    68     341.15     154.0     613.67 
+    70     343.15     158.0     617.67 
+    72     345.15     161.0     620.67 
+    74     347.15     165.0     624.67 
+    76     349.15     168.0     627.67 
+    78     351.15     172.0     631.67 
+    80     353.15     176.0     635.67 
+    82     355.15     179.0     638.67 
+    84     357.15     183.0     642.67 
+    86     359.15     186.0     645.67 
+    88     361.15     190.0     649.67 
+    90     363.15     194.0     653.67 
+    92     365.15     197.0     656.67 
+    94     367.15     201.0     660.67 
+    96     369.15     204.0     663.67 
+    98     371.15     208.0     667.67 
+   100     373.15     212.0     671.67 
+   102     375.15     215.0     674.67 
+   104     377.15     219.0     678.67 
+   106     379.15     222.0     681.67 
+   108     381.15     226.0     685.67 
+   110     383.15     230.0     689.67 
+   112     385.15     233.0     692.67 
+   114     387.15     237.0     696.67 
+   116     389.15     240.0     699.67 
+   118     391.15     244.0     703.67 
+   120     393.15     248.0     707.67 
+   122     395.15     251.0     710.67 
+   124     397.15     255.0     714.67 
+   126     399.15     258.0     717.67 
+   128     401.15     262.0     721.67 
+   130     403.15     266.0     725.67 
+   132     405.15     269.0     728.67 
+   134     407.15     273.0     732.67 
+   136     409.15     276.0     735.67 
+   138     411.15     280.0     739.67 
+   140     413.15     284.0     743.67 
+   142     415.15     287.0     746.67 
+   144     417.15     291.0     750.67 
+   146     419.15     294.0     753.67 
+   148     421.15     298.0     757.67 
+   150     423.15     302.0     761.67 
+   152     425.15     305.0     764.67 
+   154     427.15     309.0     768.67 
+   156     429.15     312.0     771.67 
+   158     431.15     316.0     775.67 
+   160     433.15     320.0     779.67
+
+____________________
+VI.
+
+#include <stdio.h>
+int main(void) {
+	double a1,a0;
+	printf("enter coefficients of Linear Equation a1*x+a0=0\n");
+	printf("in the order a1,a0, separated by spaces\n");
+	scanf("%lf %lf",&a1,&a0);
+	if (a1==0){
+		if (a0==0){
+			printf("a1=a0=0 so the equation is true for all x\n");
+		} else{
+			printf("a1=0 and a0!=0 so the equation is contradictory\n");
+		} return(0);
+	} printf("The Solution up to 2 decimal places is x = %.2f \n", -a0/a1);
+	return(0);
+}
+
+Running for a1=100 and a2=67, the output is:
+enter coefficients of Linear Equation a1*x+a0=0
+in the order a1,a0, separated by spaces
+100 67
+The Solution up to 2 decimal places is x = -0.67 
+
+If you don’t treat the special case where a1=0 then you get a result of 
+a. nan for a0=0 (0/0) 
+b. inf for a0<0 (-a0/0)
+c. -inf for a0>0 (-a0/0)
+
+____________________
+Programs Together. 
+
+Part Ia
+prog_1a.c
+
+#include <stdio.h>
+int main(void) {
+	printf(“Hello\bWorld!“);
+	return(0);
+}
+
+Part Ib
+prog_1b.c
+
+#include <stdio.h>
+int main(void) {
+	printf("         Name: <Bhageria, Yadu>\n          CID: <00733164>\n   LIBRARY NO: <0246618471>\nEmail Address: <yrb13@ic.ac.uk>\n  Course Code: <M3SC>");
+	return(0);
+}
+
+Part II
+prog_2.c
+
+#include <stdio.h>
+int main(void) {
+	int i1=4, i2=11111, i3=777777777;
+	float x1=2.0,x2=2.4048255576957728,x3=6.02214e23;
+	printf("i1, i2, i3 = %8d %8d %8d \n",i1,i2,i3);
+	printf("x1, x2, x3 = %f %f %f \n",x1,x2,x3);
+	return(0);
+}
+
+Part III
+prog_3.c
+
+#include <stdio.h>
+int main(void) {
+	short i1=44444,i2=55555,i3;
+	i3=i1*i2;
+	printf("i1, i2, i3 = %d %d %d \n", i1,i2,i3);
+	return(0);
+}
+
+Part IV
+prog_4.c
+
+#include <stdio.h>
+int main(void) {
+	float x1=1.0e6,x2=2.4048255576957728,x3;
+	/* float x1=6.02214e23,x2=3.e17,x3; */
+	x3=x1/x2;
+	printf("x1, x2, x3 = %f %f %f \n", x1,x2,x3);
+	return(0);
+}
+
+Part V
+prog_5.c
+
+#include <stdio.h>
+int main(void) {
+	int high=160,step=2,F,C=-40;
+	printf("     C          K         F          R\n");
+	while(C <= high){
+		F=32+9*C/5;
+		printf("%6d %10.2f %9.1f %10.2f \n", C,C+273.15,(float)F,F+459.67);
+		C=C+step;
+	}
+	return(0);
+}
+
+Part VI
+prog_6.c
+
+#include <stdio.h>
+int main(void) {
+	double a1,a0;
+	printf("enter coefficients of Linear Equation a1*x+a0=0\n");
+	printf("in the order a1,a0, separated by spaces\n");
+	scanf("%lf %lf",&a1,&a0);
+	if (a1==0){
+		if (a0==0){
+			printf("a1=a0=0 so the equation is true for all x\n");
+		} else{
+			printf("a1=0 and a0!=0 so the equation is contradictory\n");
+		} return(0);
+	} printf("The Solution up to 2 decimal places is x = %.2f \n", -a0/a1);
+	return(0);
+}
