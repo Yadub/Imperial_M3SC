@@ -1,6 +1,8 @@
 #include <math.h>
 #include <stdio.h>
 
+/* This version of the code deals with the case where a1^2 >> 4 a0 a2. */
+
 int lin_root(double, double, double *);
 int quad_roots(double, double, double, double *, double *);
 
@@ -35,7 +37,7 @@ int lin_root(double a1, double a0, double* r) {
 }
 
 int quad_roots(double a2, double a1, double a0, double* r1, double* r2){
-	double d,dr,four=4,two=2,zero=0;
+	double d,dr,four=4,two=2,zero=0,dummy;
 
 	if (a2==0) {
 		return (-2 + lin_root(a1,a0,r1));
@@ -51,24 +53,50 @@ int quad_roots(double a2, double a1, double a0, double* r1, double* r2){
 		}
 	}
 
+	if (isinf(a1*a1) || isinf(four*a2*a0)) {
+		d=(a1/(four*a2))*a1-(a0/a2);
+		if (d==zero){
+			*r1=(-a1)/(two*a2);
+			*r2=(-a1)/(two*a2);
+		} else if (d>zero) {
+			dr=sqrt(d);
+			*r1=(-a1/(two*a2))+dr;
+			*r2=(-a1/(two*a2))-dr;
+			return(2);
+		} else {
+			*r2=(-a1/(two*a2))+dr;
+			*r1=(-a1/(two*a2))-dr;
+			return(2);
+		}
+
+	}
+
 	d=a1*a1-four*a2*a0;
 	if (d>zero) {
 		dr=sqrt(d);
-		if (a2>zero) {
-			*r1=(-a1+dr)/(two*a2);
-			*r2=(-a1-dr)/(two*a2);
+		if (a1>zero) {
+			if (a2>zero) {
+				*r2=(-a1-dr)/(two*a2);
+				*r1=two*a0/(-a1-dr);
+			} else {
+				*r1=(-a1-dr)/(two*a2);
+				*r2=two*a0/(-a1-dr);
+			}
 		} else {
-			*r1=(-a1-dr)/(two*a2);
-			*r2=(-a1+dr)/(two*a2);
+			if (a2>zero) {
+				*r1=(-a1+dr)/(two*a2);
+				*r2=two*a0/(-a1+dr);
+			} else {
+				*r2=(-a1+dr)/(two*a2);
+				*r1=two*a0/(-a1+dr);
+			}
 		}
 		return(2);
-	}
-	else if (d==zero){
+	} else if (d==zero){
 		*r1=(-a1)/(two*a2);
 		*r2=(-a1)/(two*a2);
 		return(1);
-	}
-	else {
+	} else {
 		dr=sqrt(d);
 		*r1=(-a1)/(two*a2);
 		*r2=(sqrt(-d))/(two*a2);

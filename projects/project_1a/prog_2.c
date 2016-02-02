@@ -1,11 +1,15 @@
 #include <math.h>
 #include <stdio.h>
 
-int lin_root(double, double, double *);
-int quad_roots(double, double, double, double *, double *);
+/* This version of the code deals with the case where a1^2 >> 4 a0 a2. */
+
+#define REAL_VAR REAL_VAR
+
+int lin_root(REAL_VAR, REAL_VAR, REAL_VAR *);
+int quad_roots(REAL_VAR, REAL_VAR, REAL_VAR, REAL_VAR *, REAL_VAR *);
 
 int main(void) {
-	double  a2,a1,a0,r1,r2;
+	REAL_VAR  a2,a1,a0,r1,r2;
 	int quad_case;
 	printf("enter coefficients of Linear Equation a2*x^2+a1*x+a0=0\n");
 	printf("in the order a2,a1,a0, seperated by spaces\n");
@@ -22,7 +26,7 @@ int main(void) {
 	}
 }
 
-int lin_root(double a1, double a0, double* r) {
+int lin_root(REAL_VAR a1, REAL_VAR a0, REAL_VAR* r) {
 	if (a1==0){
 		if (a0==0){
 			return(0); // any number is a root
@@ -34,8 +38,8 @@ int lin_root(double a1, double a0, double* r) {
 	return(1);
 }
 
-int quad_roots(double a2, double a1, double a0, double* r1, double* r2){
-	double d,dr,four=4,two=2,zero=0;
+int quad_roots(REAL_VAR a2, REAL_VAR a1, REAL_VAR a0, REAL_VAR* r1, REAL_VAR* r2){
+	REAL_VAR d,dr,four=4,two=2,zero=0,dummy;
 
 	if (a2==0) {
 		return (-2 + lin_root(a1,a0,r1));
@@ -54,12 +58,22 @@ int quad_roots(double a2, double a1, double a0, double* r1, double* r2){
 	d=a1*a1-four*a2*a0;
 	if (d>zero) {
 		dr=sqrt(d);
-		if (a2>zero) {
-			*r1=(-a1+dr)/(two*a2);
-			*r2=(-a1-dr)/(two*a2);
+		if (a1>zero) {
+			if (a2>zero) {
+				*r2=(-a1-dr)/(two*a2);
+				*r1=two*a0/(-a1-dr);
+			} else {
+				*r1=(-a1-dr)/(two*a2);
+				*r2=two*a0/(-a1-dr);
+			}
 		} else {
-			*r1=(-a1-dr)/(two*a2);
-			*r2=(-a1+dr)/(two*a2);
+			if (a2>zero) {
+				*r1=(-a1+dr)/(two*a2);
+				*r2=two*a0/(-a1+dr);
+			} else {
+				*r2=(-a1+dr)/(two*a2);
+				*r1=two*a0/(-a1+dr);
+			}
 		}
 		return(2);
 	}
