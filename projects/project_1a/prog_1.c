@@ -46,8 +46,11 @@ int quad_roots(double a2, double a1, double a0, double* r1, double* r2){
 			*r1=zero;
 			return(2);
 		} else {
-			*r2=zero;
-			if (*r1==zero) {return (1);} else {return(2);}
+			if (*r1==zero) {
+				return (1);
+			} else {
+				*r2=zero;
+				return(2);}
 		}
 	}
 

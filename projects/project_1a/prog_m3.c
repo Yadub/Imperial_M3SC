@@ -13,7 +13,7 @@ int main(void) {
 	
 	printf("j, Re(w+), Im(w+), Re(w-), Im(w-)\n");
 
-	for (j=0;j<81;j=j+1) {
+	for (j=0;j<81;j=++j) {
 		z = cos(j*M_PI/40.0) + I * sin(j*M_PI/40.0);
 		a2 = 12.0;
 		a1 = -9*z*z;
