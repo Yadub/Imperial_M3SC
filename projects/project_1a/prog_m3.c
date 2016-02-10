@@ -8,16 +8,17 @@ int lin_root(double complex, double complex, double complex *);
 int quad_roots(double complex, double complex, double complex, double complex *, double complex *);
 
 int main(void) {
+	printf("         Name: <Bhageria, Yadu>\n          CID: <00733164>\n   LIBRARY NO: <0246618471>\nEmail Address: <yrb13@ic.ac.uk>\n  Course Code: <M3SC>\n");
 	double complex  a2,a1,a0,r1,r2,z;
 	int quad_case,j;
 	
-	printf("j, Re(w+), Im(w+), Re(w-), Im(w-)\n");
+	printf("j,   Re(w+),    Im(w+),    Re(w-),    Im(w-)\n");
 
 	for (j=0;j<81;j=++j) {
 		z = cos(j*M_PI/40.0) + I * sin(j*M_PI/40.0);
 		a2 = 12.0;
 		a1 = -9*z*z;
-		a0 = 24*z - 8*z - 12;
+		a0 = 24*z - 8*z*z - 12;
 		/*
 		printf("a2 = %.1f%+.1fi\n", creal(a2), cimag(a2));
 		printf("a1 = %.1f%+.1fi\n", creal(a1), cimag(a1));

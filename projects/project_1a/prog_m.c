@@ -8,6 +8,7 @@ int lin_root(double complex, double complex, double complex *);
 int quad_roots(double complex, double complex, double complex, double complex *, double complex *);
 
 int main(void) {
+	printf("         Name: <Bhageria, Yadu>\n          CID: <00733164>\n   LIBRARY NO: <0246618471>\nEmail Address: <yrb13@ic.ac.uk>\n  Course Code: <M3SC>");
 	double complex  a2,a1,a0,r1,r2;
 	double a2re,a2im,a1re,a1im,a0re,a0im;
 	int quad_case;
