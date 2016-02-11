@@ -24,6 +24,7 @@ int quad_roots(REAL_VAR, REAL_VAR, REAL_VAR, REAL_VAR *, REAL_VAR *);
 int quad_roots_old(REAL_VAR, REAL_VAR, REAL_VAR, REAL_VAR *, REAL_VAR *);
 
 int main(void) {
+	printf("         Name: <Bhageria, Yadu>\n          CID: <00733164>\n   LIBRARY NO: <0246618471>\nEmail Address: <yrb13@ic.ac.uk>\n  Course Code: <M3SC>\n");
 	REAL_VAR  a2,a1,a0,r1,r2;
 	int quad_case;
 

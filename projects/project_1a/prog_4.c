@@ -7,6 +7,7 @@ int lin_root(double, double, double *);
 int quad_roots(double, double, double, double *, double *);
 
 int main(void) {
+	printf("         Name: <Bhageria, Yadu>\n          CID: <00733164>\n   LIBRARY NO: <0246618471>\nEmail Address: <yrb13@ic.ac.uk>\n  Course Code: <M3SC>\n");
 	double  a2,a1,a0,r1,r2;
 	int quad_case;
 	printf("enter coefficients of Linear Equation a2*x^2+a1*x+a0=0\n");
