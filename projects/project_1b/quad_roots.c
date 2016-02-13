@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <math.h>
-#include "order_by_size.h"
+#include "order_nums.h"
 #include "lin_root.h"
 #include "quad_roots.h"
 
@@ -15,7 +15,7 @@ int quad_roots(double a2, double a1, double a0, double* r1, double* r2){
 			if (*r1==zero) {return (1);}
 			else {
 				*r2=zero;
-				order_by_size(r1,r2);
+				order_2(r1,r2);
 				return(2);
 			}
 		}
@@ -42,21 +42,18 @@ int quad_roots(double a2, double a1, double a0, double* r1, double* r2){
 		if (a1_half>=a0){
 			if (a1>zero) {
 				*r1=(-a1_half-fabs(a1_half)*sqrt(e))/a2;
-				*r2=(a0 / *r1)/a2;
 			} else {
 				*r1=(-a1_half+fabs(a1_half)*sqrt(e))/a2;
-				*r2=(a0 / *r1)/a2;
 			}
 		} else{
 			if (a1>zero) {
 				*r1=(-a1_half-sqrt(fabs(a0))*sqrt(-e))/a2;
-				*r2=(a0 / *r1)/a2;
 			} else {
 				*r1=(-a1_half+sqrt(fabs(a0))*sqrt(-e))/a2;
-				*r2=(a0 / *r1)/a2;
 			}
 		}
-	order_by_size(r1,r2);
+	*r2=(a0 / *r1)/a2;
+	order_2(r1,r2);
 	return(2);
 	}
 }

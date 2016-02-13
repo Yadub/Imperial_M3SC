@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <math.h>
-#include "order_by_size.h"
+#include "order_nums.h"
 #include "lin_root.h"
 #include "quad_roots.h"
 
