@@ -39,7 +39,7 @@ int quad_roots(double a2, double a1, double a0, double* r1, double* r2){
 		*r1=(-a1_half)/(a2);
 		return(1);
 	} else {
-		if (a1_half>=a0){
+		if (fabs(a1_half)>=fabs(a0)){
 			if (a1>zero) {
 				*r1=(-a1_half-fabs(a1_half)*sqrt(e))/a2;
 			} else {
@@ -47,9 +47,9 @@ int quad_roots(double a2, double a1, double a0, double* r1, double* r2){
 			}
 		} else{
 			if (a1>zero) {
-				*r1=(-a1_half-sqrt(fabs(a0))*sqrt(-e))/a2;
+				*r1=(-a1_half-sqrt(fabs(a0))*sqrt(e))/a2;
 			} else {
-				*r1=(-a1_half+sqrt(fabs(a0))*sqrt(-e))/a2;
+				*r1=(-a1_half+sqrt(fabs(a0))*sqrt(e))/a2;
 			}
 		}
 	*r2=(a0 / *r1)/a2;

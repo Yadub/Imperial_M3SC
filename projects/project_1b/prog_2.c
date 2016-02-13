@@ -20,7 +20,7 @@ int main(void) {
 	switch (cubic_case) {
 		case 0: printf("There is one real root (r1) and two complex roots (r2,r3).\n r1 = %.10g, r2 = %.10g + %.10gi, r3 = %.10g - %.10gi \n", r1,r2,r3,r2,r3); break;
 		case 1: printf("There are triple repeated real roots.\n r1 = r2 = r3 = %.10g \n", r1); break;
-		case 2: printf("There is a pair of repeated real roots.\n r1 = %.10g, r2 = %.10g, r3 = .%10g \n", r1,r2,r3); break;
+		case 2: printf("There is a pair of repeated real roots.\n r1 = %.10g, r2 = %.10g, r3 = %.10g \n", r1,r2,r3); break;
         case 3: printf("There are three distinct real roots.\n r1 = %.10g, r2 = %.10g, r3 = %.10g \n", r1,r2,r3); break;
     }
 }

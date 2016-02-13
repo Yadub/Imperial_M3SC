@@ -106,7 +106,8 @@ int rcubic_roots(double a2, double a1, double a0, double *r1, double *r2, double
             printf("Note: one root found has been found using the Newtom Rapheson approximation method.\n");
         /* one real root has been found. Now we use our quadratic formula
         to find the other roots and return the appropriate value */
-        quad_case = quad_roots(one,a2+*r1,-a0/ *r1,r2,r3);
+        printf("%g, %g\n", a2+(*r1),-a0/(*r1));
+        quad_case = quad_roots(one,a2+(*r1),-a0/(*r1),r2,r3);
         switch (quad_case) {
             case 0: return(0);
             case 1: if (r1==r2){return(1);} else {return(2);}
