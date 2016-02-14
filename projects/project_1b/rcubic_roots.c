@@ -86,27 +86,26 @@ int rcubic_roots(double a2, double a1, double a0, double *r1, double *r2, double
             return(2);
         }
 
-            alpha=cbrt(two*beta*beta*beta - a1*beta - a0); //can change to pow(z,1/3) if not using c11
-            p=(three*beta*beta-a1)/(alpha*alpha);
-            if (p==zero){yn=one;}
-            else {
-                if (p>11.0/three){y0=sqrt(p);} else if (p<-1.92) {y0=-1.0/p;} else {y0=1.0 + p/3.0 - (p*p*p)/81.0;} //set starting value of p
-                yn=y0;
-                /* printf("%g\n", yn_div); */
-                for (count=1;count<4;count=count+1) {
-                    /* printf("count: %d\n", count); */
-                    yn_plus1 = yn - rcubic_value(zero,-p,-one,yn)/diffrcubic_value(zero,-p,-one,yn);
-                    /* printf("yn = %.10g, yn+1 = %.10g\n", yn,yn_plus1); */
-                    if (yn_plus1==yn) {printf("yn+1 == yn\n");break;}
-                    if (yn_div-fabs(yn-yn_plus1)<zero){printf("|yn+1 - yn| diverging\n");break;}
-                    yn_div=fabs(yn-yn_plus1);
-                    yn=yn_plus1;
-                }
-            } *r1= alpha*yn + beta;
-            printf("Note: one root found has been found using the Newtom Rapheson approximation method.\n");
-        /* one real root has been found. Now we use our quadratic formula
+        alpha=cbrt(two*beta*beta*beta - a1*beta - a0); //can change to pow(z,1/3) if not using c11
+        p=(three*beta*beta-a1)/(alpha*alpha);
+        if (p==zero){yn=one;}
+        else {
+            if (p>11.0/three){y0=sqrt(p);} else if (p<-1.92) {y0=-1.0/p;} else {y0=1.0 + p/3.0 - (p*p*p)/81.0;} //set starting value of p
+            yn=y0;
+            /* printf("%g\n", yn_div); */
+            for (count=1;count<4;count=count+1) {
+                /* printf("count: %d\n", count); */
+                yn_plus1 = yn - rcubic_value(zero,-p,-one,yn)/diffrcubic_value(zero,-p,-one,yn);
+                /* printf("yn = %.10g, yn+1 = %.10g\n", yn,yn_plus1); */
+                if (yn_plus1==yn) {/*printf("yn+1 == yn\n");*/break;}
+                if (yn_div-fabs(yn-yn_plus1)<zero){/*printf("|yn+1 - yn| diverging\n");*/break;}
+                yn_div=fabs(yn-yn_plus1);
+                yn=yn_plus1;
+            }
+        } *r1= alpha*yn + beta;
+        /*printf("Note: one root found has been found using the Newtom Rapheson approximation method.\n");
+        One real root has been found. Now we use our quadratic formula
         to find the other roots and return the appropriate value */
-        printf("%g, %g\n", a2+(*r1),-a0/(*r1));
         quad_case = quad_roots(one,a2+(*r1),-a0/(*r1),r2,r3);
         switch (quad_case) {
             case 0: return(0);
