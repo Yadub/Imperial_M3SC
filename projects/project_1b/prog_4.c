@@ -4,17 +4,18 @@
 #include "lin_root.h"
 #include "quad_roots.h"
 #include "rcubic_roots.h"
+#include "print_statements.h"
 
 /* This version of the code deals with the case where
 a1^2 >> 4 a0 a2 or 4 a0 a2 >> a1^2 */
 
 int main(void) {
-	printf("         Name: <Bhageria, Yadu>\n          CID: <00733164>\n   LIBRARY NO: <0246618471>\nEmail Address: <yrb13@ic.ac.uk>\n  Course Code: <M3SC>\n");
+	print_statements();
 	double  a2,a1,a0,r1,r2,r3;
     double alp=0.2135,bet=0.01709,P,R=0.0820578,V_ideal;
 	int cubic_case,T;
 
-    printf(" T,     P,        V_ideal, V that satify the Van Der Waals cubic equation\n");
+    printf(" T,     P,        V_ideal, V that satisfy the Van Der Waals cubic equation\n");
     for (T=40;T<=50;T=T+5){
         for (P=1;P<=30;P=P+0.5){
             a2=-bet-R*T/P;
