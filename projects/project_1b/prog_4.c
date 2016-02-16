@@ -3,7 +3,7 @@
 #include "order_nums.h"
 #include "lin_root.h"
 #include "quad_roots.h"
-#include "rcubic_roots.h"
+#include "rcubic_roots_optimized.h"
 #include "print_statements.h"
 
 /* This version of the code deals with the case where

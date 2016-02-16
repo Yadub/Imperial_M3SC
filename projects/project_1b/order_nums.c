@@ -14,3 +14,10 @@ void order_3(double *r1, double *r2, double *r3) {
     order_2(r1,r2);
     order_2(r2,r3);
 }
+
+int sgn(double x){
+	double zero = 0;
+	if (x<zero){return(-1);}
+	else if (x>zero){return(1);}
+	return(0);
+}

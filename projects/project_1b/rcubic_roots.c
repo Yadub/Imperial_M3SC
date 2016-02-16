@@ -16,16 +16,15 @@ int rcubic_roots(double a2, double a1, double a0, double *r1, double *r2, double
     double zero=0,one=1,two=2,three=3;
     double alpha,beta,p,y;
 
+    /* a2=a1=a0=0. So x^3 = 0 => r1=r2=r3=0 */
     if (a2 == zero & a1 == zero & a0 == zero) {
-/* a2=a1=a0=0. So x^3 = 0 => r1=r2=r3=0 */
         *r1=zero;
         return(1);
     }
     beta=-a2/three;
     alpha=cbrt(two*beta*beta*beta - a1*beta - a0); //can change to pow(z,1/3) if not using c11
+    /*trivial case where we only need to solve a quadratic equation of the form x(x^2 + a2*x + a1) = 0 */
     if (a0==zero){
-/*trivial case where we only need to solve a quadratic equation
-of the form x(x^2 + a2*x + a1) = 0 */
         *r1=zero;
     }  else if (alpha == zero){
         *r1 = beta;
