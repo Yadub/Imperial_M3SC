@@ -4,6 +4,7 @@
 
 /* Computes the root for a linear equation */
 int lin_root(double a1, double a0, double* r) {
+	/* Bhageria, Yadu, M3SC */
 	if (a1==0){
 		if (a0==0){
 			return(0); // any number is a root

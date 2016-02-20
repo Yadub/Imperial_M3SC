@@ -5,6 +5,7 @@
 #include "quad_roots.h"
 
 int quad_roots(double a2, double a1, double a0, double* r1, double* r2){
+	/* Bhageria, Yadu, M3SC */
 	double two=2,zero=0,one=1,a1_half,e,coef;
 	int d_sgn,add_sgn;
 
@@ -35,6 +36,7 @@ int quad_roots(double a2, double a1, double a0, double* r1, double* r2){
 		return(0);
 	} else if (d_sgn==0){
 		*r1=(-a1_half)/(a2);
+		*r2=(-a1_half)/(a2);
 		return(1);
 	} else {
 		add_sgn = a1 == zero ? 1 : sgn(a1);

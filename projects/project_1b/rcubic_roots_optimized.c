@@ -6,6 +6,8 @@
 #include "quad_roots.h"
 #include "rcubic_roots_optimized.h"
 
+void substitute_root(double, double, double *);
+void substitute_roots(double, double, double *, double *, double *);
 void set_starting_y0(double, double *);
 double iterate_y(double, double );
 double newton_rapheson(double );
@@ -15,15 +17,16 @@ int rcubic_roots(double, double, double, double *, double *, double *);
 
 /* Cubic Solver using the Newton-Rapheson approximation for the first real root */
 int rcubic_roots(double a2, double a1, double a0, double *r1, double *r2, double *r3){
+    /* Bhageria, Yadu, M3SC */
     double zero=0,one=1,two=2,three=3;
     double alpha,beta,p,y;
-    double epsilon=1e-13,p2=3.0*cbrt(0.25),y2 = -cbrt(0.5);;
+    double epsilon=1e-7,p2=3.0*cbrt(0.25),y2 = -cbrt(0.5);;
 
     if (a2 == zero && a1 == zero && a0 == zero) { /* a2=a1=a0=0. So x^3 = 0 => r1=r2=r3=0 */
         *r1=zero;
         return(1);
     } else if (a2 == zero && a1 == zero) { /* Part 3 i */
-        return(roots_of_unity(-cbrt(a0),r1,r2,r3));
+        return(roots_of_unity(cbrt(-a0),r1,r2,r3));
     }
 
     beta=-a2/three;
@@ -44,8 +47,8 @@ int rcubic_roots(double a2, double a1, double a0, double *r1, double *r2, double
             order_3(r1,r2,r3);
             return *r1==*r2 || *r2==*r3 ? 2 : 3;
         }
-    } else if ( 3.0*a1==a2*a2  && 27.0*a0==a2*a2*a2 ){ /* Part 3 iv */
-        *r1 = a2/3.0;
+    } else if ( fabs(3.0*a1-a2*a2)<epsilon && fabs(27.0*a0-a2*a2*a2)<epsilon ){ /* Part 3 iv */
+        *r1 = -a2/3.0;
         return(1);
     } else if (alpha == zero){ /* When our degeneration doesn't makes sense */
         *r1 = beta;
@@ -56,6 +59,11 @@ int rcubic_roots(double a2, double a1, double a0, double *r1, double *r2, double
             *r3 = alpha/(y2*y2) + beta;
             order_3(r1,r2,r3);
             return *r1==*r2 || *r2==*r3 ? 2 : 3;
+    } else if (p==zero) {
+            roots_of_unity(one,r1,r2,r3);
+            substitute_root(alpha,beta,r1);
+            substitute_root(alpha,beta,r2);
+            return(0);
     } else {
         y=newton_rapheson(p);
         *r1= alpha*y + beta;
@@ -65,12 +73,14 @@ int rcubic_roots(double a2, double a1, double a0, double *r1, double *r2, double
 
 /* finds yn+1 for given yn and p */
 double iterate_y(double p, double y){
+    /* Bhageria, Yadu, M3SC */
     double one=1,three=3;
     return(y-(y*y*y-p*y-one)/(three*y*y-p));
 }
 
 /* Sets starting value of yn based on p */
 void set_starting_y0(double p, double *y0){
+    /* Bhageria, Yadu, M3SC */
     if (p>11.0/3.0){*y0=sqrt(p);}
     else if (p<-1.92) {*y0=-1.0/p;}
     else {*y0=1.0 + p/3.0 - (p*p*p)/81.0;}
@@ -78,6 +88,7 @@ void set_starting_y0(double p, double *y0){
 
 /* Computes first real root using the Newton-Rapheson approximation method */
 double newton_rapheson(double p){
+    /* Bhageria, Yadu, M3SC */
     double zero=0,one=1,yn,yn1,diff,diff1;
     int count=1;
     if (p==zero){yn1=one;}
@@ -98,6 +109,7 @@ double newton_rapheson(double p){
 
 /* Computes r2 and r3 once r1 has been found. Returns an integer corresponding to the number of real roots found */
 int roots_return(double a2, double a1, double a0, double *r1, double *r2, double *r3){
+    /* Bhageria, Yadu, M3SC */
     int quad_case = quad_roots(a2,a1,a0,r2,r3);
     switch (quad_case) {
         case 0: return(0);
@@ -109,8 +121,20 @@ int roots_return(double a2, double a1, double a0, double *r1, double *r2, double
 }
 
 int roots_of_unity(double r, double *r1, double *r2, double *r3){
-    *r1 = r;
-    *r2 = r/2.0;
-    *r3 = r*sqrt(3.0)/2.0;
+    /* Bhageria, Yadu, M3SC */
+    *r1 = r; //Real Root
+    *r2 = r/2.0; //Real Part of Complex Roots
+    *r3 = fabs(r)*sqrt(3.0)/2.0; //Positive Imaginary Part of Complex Roots
     return(0);
+}
+
+void substitute_roots(double alpha, double beta, double *r1, double *r2, double *r3){
+    /* Bhageria, Yadu, M3SC */
+    substitute_root(alpha,beta,r1);
+    substitute_root(alpha,beta,r2);
+    substitute_root(alpha,beta,r3);
+}
+void substitute_root(double alpha, double beta, double *r1){
+    /* Bhageria, Yadu, M3SC */
+    *r1 = alpha * (*r1) + beta;
 }

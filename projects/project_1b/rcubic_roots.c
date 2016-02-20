@@ -13,6 +13,7 @@ int rcubic_roots(double, double, double, double *, double *, double *);
 
 /* Cubic Solver using the Newton-Rapheson approximation for the first real root */
 int rcubic_roots(double a2, double a1, double a0, double *r1, double *r2, double *r3){
+    /* Bhageria, Yadu, M3SC */
     double zero=0,one=1,two=2,three=3;
     double alpha,beta,p,y;
 
@@ -22,7 +23,7 @@ int rcubic_roots(double a2, double a1, double a0, double *r1, double *r2, double
         return(1);
     }
     beta=-a2/three;
-    alpha=cbrt(two*beta*beta*beta - a1*beta - a0); //can change to pow(z,1/3) if not using c11
+    alpha=cbrt(two*beta*beta*beta - a1*beta - a0);
     /*trivial case where we only need to solve a quadratic equation of the form x(x^2 + a2*x + a1) = 0 */
     if (a0==zero){
         *r1=zero;
@@ -39,12 +40,14 @@ int rcubic_roots(double a2, double a1, double a0, double *r1, double *r2, double
 
 /* finds yn+1 for given yn and p */
 double iterate_y(double p, double y){
+    /* Bhageria, Yadu, M3SC */
     double one=1,three=3;
     return(y-(y*y*y-p*y-one)/(three*y*y-p));
 }
 
 /* Sets starting value of yn based on p */
 void set_starting_y0(double p, double *y0){
+    /* Bhageria, Yadu, M3SC */
     if (p>11.0/3.0){*y0=sqrt(p);}
     else if (p<-1.92) {*y0=-1.0/p;}
     else {*y0=1.0 + p/3.0 - (p*p*p)/81.0;}
@@ -52,6 +55,7 @@ void set_starting_y0(double p, double *y0){
 
 /* Computes first real root using the Newton-Rapheson approximation method */
 double newton_rapheson(double p){
+    /* Bhageria, Yadu, M3SC */
     double zero=0,one=1,yn,yn1,diff,diff1;
     int count=1;
     if (p==zero){yn1=one;}
@@ -72,6 +76,7 @@ double newton_rapheson(double p){
 
 /* Computes r2 and r3 once r1 has been found. Returns an integer corresponding to the number of real roots found */
 int roots_return(double a2, double a1, double a0, double *r1, double *r2, double *r3){
+    /* Bhageria, Yadu, M3SC */
     int quad_case = quad_roots(a2,a1,a0,r2,r3);
     switch (quad_case) {
         case 0: return(0);

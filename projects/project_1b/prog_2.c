@@ -10,6 +10,7 @@
 a1^2 >> 4 a0 a2 or 4 a0 a2 >> a1^2 */
 
 int main(void) {
+	/* Bhageria, Yadu, M3SC */
 	print_statements();
 	double  a2,a1,a0,r1,r2,r3;
 	int cubic_case;
