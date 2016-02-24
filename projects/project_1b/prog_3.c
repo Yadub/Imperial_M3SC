@@ -6,26 +6,26 @@
 #include "rcubic_roots_optimized.h"
 #include "print_statements.h"
 
-/* This version of the code deals with the case where
-a1^2 >> 4 a0 a2 or 4 a0 a2 >> a1^2 */
+/* --------------------------------------------------------------------------- */
 
 int main(void) {
 	/* Bhageria, Yadu, M3SC */
 	print_statements();
 	double  a2,a1,a0,r1,r2,r3;
-	double alp=0.2135,bet=0.01709,R=0.0820578,T,P;
 	int cubic_case;
-	//printf("Enter coefficients of Equation x^3+a2*x^2+a1*x+a0=0\n");
-	//printf("in the order a2,a1,a0, seperated by spaces: ");
-	//scanf("%lf %lf %lf",&a2,&a1,&a0);
-	P = alp/(27.0*bet*bet);
-	T = (P/R)*(sqrt(3.0*alp/P)-bet);
-	printf("\n T: %f\n", T);
-	printf(" P: %f\n", P);
 
-	a2=-bet-R*T/P;
-	a1=alp/P;
-	a0=-(alp*bet)/P;
+	printf("Enter coefficients of Equation x^3+a2*x^2+a1*x+a0=0\n");
+	printf("in the order a2,a1,a0, seperated by spaces: ");
+	scanf("%lf %lf %lf",&a2,&a1,&a0);
+
+	//double alp=0.2135,bet=0.01709,R=0.0820578,T,P;
+	//P = alp/(27.0*bet*bet);
+	//T = (P/R)*(sqrt(3.0*alp/P)-bet);
+	//printf("\n T: %f\n", T);
+	//printf(" P: %f\n", P);
+	//a2=-bet-R*T/P;
+	//a1=alp/P;
+	//a0=-(alp*bet)/P;
 
 	cubic_case = rcubic_roots(a2,a1,a0,&r1,&r2,&r3);
 	switch (cubic_case) {

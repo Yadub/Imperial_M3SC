@@ -1,19 +1,18 @@
 #include <stdio.h>
 #include <math.h>
 #include <complex.h>
-#include <float.h>
-#include "quad_roots_complex.h"
+#include <float.h> //for DBL_EPSILON
 
-/* --------------------------------------------------------------------------- */
+/* -Functions-needed-from-other-files----------------------------------------- */
 int quad_roots(double complex,double complex,double complex,double complex *,double complex *);
-/* --------------------------------------------------------------------------- */
+/* -Functions-implemented-in-current-file------------------------------------- */
 double complex iterate_z(double complex, double complex, double complex, double complex);
 double complex newton_rapheson(double complex, double complex, double complex);
 void order_2(double complex *, double complex *);
 void order_3(double complex *, double complex *, double complex *);
 int roots_return(double complex *, double complex *, double complex *);
-void direct_method(double complex, double complex, double complex, double complex *, double complex *, double complex *);
 int rcubic_roots(double complex, double complex, double complex, double complex *, double complex *, double complex *);
+void direct_method(double complex, double complex, double complex, double complex *, double complex *, double complex *); //to comapre with the NR method
 /* --------------------------------------------------------------------------- */
 
 int rcubic_roots(double complex a2, double complex a1, double complex a0, double complex * r1, double complex * r2, double complex * r3){
@@ -44,11 +43,13 @@ int rcubic_roots(double complex a2, double complex a1, double complex a0, double
     }
     return(roots_return(r1,r2,r3));
 }
+/* --------------------------------------------------------------------------- */
 
 double complex iterate_z(double complex a2, double complex a1, double complex a0, double complex z){
     /* Bhageria, Yadu, M3SC */
     return(z - (z*z*z + a2*z*z + a1*z + a0)/(3.0*z*z + 2.0*a2*z + a1));
 }
+/* --------------------------------------------------------------------------- */
 
 double complex newton_rapheson(double complex a2, double complex a1, double complex a0){
     /* Bhageria, Yadu, M3SC */
@@ -61,10 +62,9 @@ double complex newton_rapheson(double complex a2, double complex a1, double comp
         zn=zn1;
         zn1 = iterate_z(a2,a1,a0,zn);
         count = count + 1;
-
-    }
-    return(zn1);
+    } return(zn1);
 }
+/* --------------------------------------------------------------------------- */
 
 void order_2(double complex *r1, double complex *r2){
     /* Bhageria, Yadu, M3SC */
@@ -81,6 +81,7 @@ void order_2(double complex *r1, double complex *r2){
         }
     }
 }
+/* --------------------------------------------------------------------------- */
 
 void order_3(double complex *r1, double complex *r2, double complex *r3){
     /* Bhageria, Yadu, M3SC */
@@ -88,6 +89,7 @@ void order_3(double complex *r1, double complex *r2, double complex *r3){
     order_2(r1,r2);
     order_2(r2,r3);
 }
+/* --------------------------------------------------------------------------- */
 
 int roots_return(double complex *r1, double complex *r2, double complex *r3){
     /* Bhageria, Yadu, M3SC */
@@ -98,6 +100,7 @@ int roots_return(double complex *r1, double complex *r2, double complex *r3){
         return (*r1==*r2) || (*r2==*r3) ? 2 : 3;
     }
 }
+/* --------------------------------------------------------------------------- */
 
 void direct_method(double complex a2, double complex a1, double complex a0, double complex * r1, double complex * r2, double complex * r3){
     double complex A,B;
@@ -109,3 +112,4 @@ void direct_method(double complex a2, double complex a1, double complex a0, doub
     *r2 = -a2/3.0 + ((-1.0 - I * sqrt(3.0))/2.0)*A - ((-1.0 + I * sqrt(3.0))/2.0)*B;
     *r3 = -a2/3.0 + ((-1.0 + I * sqrt(3.0))/2.0)*A - ((-1.0 - I * sqrt(3.0))/2.0)*B;
 }
+/* --------------------------------------------------------------------------- */

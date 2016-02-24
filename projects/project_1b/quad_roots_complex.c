@@ -39,9 +39,6 @@ int quad_roots(double complex a2, double complex a1, double complex a0, double c
 		dr=csqrt(d);
 		*r1 = (-a1-dr)/(two*a2);
 		*r2 = (-a1+dr)/(two*a2);
-		if (cimag(*r1)<0){
-			*r1 = conj(*r1);
-			*r2 = conj(*r2);
-		} return(2);
+		return(2);
 	}
 }

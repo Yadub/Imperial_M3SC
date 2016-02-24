@@ -1,13 +1,10 @@
 #include <stdio.h>
 #include <math.h>
 #include <complex.h>
-#include "quad_roots_complex.h"
-#include "print_statements.h"
 
-/* --------------------------------------------------------------------------- */
-
+/* -Functions-needed-from-other-files----------------------------------------- */
 int rcubic_roots(double complex, double complex, double complex, double complex *, double complex *, double complex *);
-
+void print_statements();
 /* --------------------------------------------------------------------------- */
 
 int main(void) {
@@ -37,3 +34,4 @@ int main(void) {
         case 3: printf("There are three distinct real roots.\n r1 = %.10g + %.10gi, r2 = %.10g + %.10gi, r3 = %.10g + %.10gi \n", creal(r1),cimag(r1),creal(r2),cimag(r2),creal(r3),cimag(r3)); break;
     }
 }
+/* --------------------------------------------------------------------------- */
