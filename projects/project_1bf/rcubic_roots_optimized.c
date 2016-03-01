@@ -71,7 +71,6 @@ int rcubic_roots(double a2, double a1, double a0, double *r1, double *r2, double
         *r2 = alpha * (*r2) + beta;
             return(0);
     } else {
-        printf("Test\n" );
         y=newton_rapheson(p);
         *r1= alpha*y + beta;
     }
