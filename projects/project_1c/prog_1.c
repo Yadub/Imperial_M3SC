@@ -9,7 +9,7 @@ double f_x(double *, double);
 /* --------------------------------------------------------------------------- */
 
 int main(void) {
-	/* Bhageria, Yadu, M3SC */
+	/* Bhageria, Yadu, 00733164, M3SC */
 	print_statements();
 	double  a[3],root[4];
 	int cubic_case;
@@ -18,16 +18,6 @@ int main(void) {
 	printf("in the order a, separated by spaces: ");
 	scanf("%lf %lf %lf",&a[2],&a[1],&a[0]);
 	printf("\n");
-
-	//double alp=0.2135,bet=0.01709,R=0.0820578,T,P;
-	//P = alp/(27.0*bet*bet);
-	//T = (P/R)*(sqrt(3.0*alp/P)-bet);
-	//printf(" T: %f\n", T);
-	//printf(" P: %f\n", P);
-	//printf("\n");
-	//a[2]=-bet-R*T/P;
-	//a[1]=alp/P;
-	//a[0]=-(alp*bet)/P;
 
 	cubic_case = rcubic_roots(a,root);
 	switch (cubic_case) {

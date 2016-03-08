@@ -1,26 +1,27 @@
 #include <stdio.h>
 #include <math.h>
+#include <float.h>
 
 /* -Functions-needed-from-other-files----------------------------------------- */
 int lin_root(double *,double *);
 /* -Functions-implemented-in-current-file------------------------------------- */
 int sgn(double);
-void order(double *);
+void order(double *, int);
 int quad_roots(double *, double *);
 void print_statements();
 /* --------------------------------------------------------------------------- */
 
 int quad_roots(double *a, double * root){
-	/* Bhageria, Yadu, M3SC */
+	/* Bhageria, Yadu, 00733164, M3SC */
 	double two=2,zero=0,one=1,a1_half,e,coef;
-	int d_sgn,add_sgn;
+	int d_sgn,add_sgn,sub_sgn;
 
 	if (a[2]==0) {
 		return (-2 + lin_root(a,root));
 	} else if (a[0]==0) {
 		lin_root(a,root);
 		root[2] = zero;
-		order(root);
+		order(root,2);
 		return root[1] == root[2] ? 1 : 2;
 	}
 
@@ -41,28 +42,28 @@ int quad_roots(double *a, double * root){
 		root[2]=coef*sqrt(fabs(e))/a[2]; //Imaginary Part
 		return(0);
 	} else if (d_sgn==0){
-		root[1]=(-a1_half)/(a[2]);
-		root[2]=(-a1_half)/(a[2]);
+		root[1] = root[2] = (-a1_half)/(a[2]);
 		return(1);
 	} else {
 		add_sgn = a[1] == zero ? 1 : sgn(a[1]);
-		root[1]=(-a1_half-add_sgn*coef*sqrt(fabs(e)))/a[2];
-		root[2]=(a[0] / root[1])/a[2];
-		order(root);
+		sub_sgn = -add_sgn;
+		root[1] = ( -a1_half-add_sgn*coef*sqrt(fabs(e)) ) / a[2];
+		root[2] = ( fabs(a[0])<10*DBL_EPSILON && fabs(a[2])<10*DBL_EPSILON ) ? (a[0]/a[2])/root[1] : (a[0] / root[1])/a[2];
+		order(root,2);
 		return(2);
 	}
 }
 /* --------------------------------------------------------------------------- */
 
-void order(double * nums) {
-	/* Bhageria, Yadu, M3SC */
-	int i,j,n = sizeof(nums);
-	for (i=0;i<n;i++){
-		for(j=0;j<n-i;j++){
-			if (nums[j] < nums[j+1]) {
+void order(double * nums, int n) {
+	/* Bhageria, Yadu, 00733164, M3SC */
+	int i,j;
+	for (i=1;i<n+1;i++){
+		for (j=n;j>i;j--){
+			if (nums[i]<nums[j]) {
 				double dummy = nums[j];
-				nums[j] = nums[j+1];
-				nums[j+1] = dummy;
+				nums[j] = nums[i];
+				nums[i] = dummy;
 			}
 		}
 	}
@@ -70,7 +71,7 @@ void order(double * nums) {
 /* --------------------------------------------------------------------------- */
 
 int sgn(double x){
-	/* Bhageria, Yadu, M3SC */
+	/* Bhageria, Yadu, 00733164, M3SC */
 	double zero = 0;
 	if (x<zero){return(-1);}
 	else if (x>zero){return(1);}
@@ -79,7 +80,7 @@ int sgn(double x){
 /* --------------------------------------------------------------------------- */
 
 void print_statements(){
-    /* Bhageria, Yadu, M3SC */
+    /* Bhageria, Yadu, 00733164, M3SC */
     printf(  "         Name: Bhageria, Yadu");
     printf("\n          CID: 00733164");
 	printf("\n  Course Code: M3SC");
