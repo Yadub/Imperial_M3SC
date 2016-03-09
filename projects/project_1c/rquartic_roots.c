@@ -20,12 +20,11 @@ int rquartic_roots(double *a, double *root){
     int qc1,qc2;
 
 /* Optimization Cases that Skip the R-Quartic Method */
-#ifndef NON_OPTIMIZED
     /* Part i */
     if (a[0]==zero){
         root[1] = 0;
         qc1 = rcubic_roots(a+1,root+1);
-        return return_roots( root[1] == root [2] ? 1 : 2 , qc1 > 1 ? qc1 - 1 : qc1 , root);
+        return return_roots( root[1] == root[2] ? 1 : 2 , qc1 > 1 ? qc1 - 1 : qc1 , root);
     } /* Part iii */
     else if (a[3]==zero && a[2]==zero && a[1]==zero) {
         return quartic_roots_of_unity(-a[0], root);
@@ -33,27 +32,30 @@ int rquartic_roots(double *a, double *root){
     else if (a[3]==zero && a[1]==zero){
         return squared_quadratic(a, root);
     }
-#endif
 
     double coefs_q1[3],coefs_q2[3];
     coefs_q1[2] = coefs_q2[2] = 1.0;
 
     double b[] = {4.0*a[0]*a[2] - a[1]*a[1] - a[0]*a[3]*a[3] , a[1]*a[3] - 4.0*a[0] , -a[2]};
-    rcubic_roots(b,root);
-    double r = root[1];
+    int cubic_case = rcubic_roots(b,root);
+    double r = ( fabs(root[1])<DBL_EPSILON ) ? 0 : root[1];
 
-    //deal with underflow?
-    double v0_coef = fabs(r) < fabs(a[0]) ? sqrt( (r/2.0)*(r/2.0) - a[0] ) : fabs(r/2.0)*sqrt( 1.0 - (4.0*a[0]/r)/r );
-    double v1_coef = fabs(a[3]) < 1 ? sqrt(a[3]*a[3]/4.0 + r - a[2]) : fabs(a[3])*sqrt( 1.0/4.0 + (r/a[3])/a[3] - (a[2]/a[3])/a[3] );
+    if (cubic_case>1 && r == zero){
+        r = root[2]==zero ? root[3] : root[2];
+    }
+    double v0_coef = sqrt( (r/2.0)*(r/2.0) - a[0] );
+    double v1_coef = sqrt( a[3]*a[3]/4.0 + r - a[2] );
 
 #ifdef DEBUG
     printf("DEBUG REPORT| Not an Optimization Case\n");
-    printf("DEBUG REPORT| r = %g\n", r);
+    printf("DEBUG REPORT| b = %g, %g, %g\n", b[2],b[1],b[0]);
+    printf("DEBUG REPORT| cubic_case = %d\n", cubic_case);
+    printf("DEBUG REPORT| roots = %g %g %g\n", root[1], root[2], root[3]);
+    printf("DEBUG REPORT| r = %.20g\n", r);
     printf("DEBUG REPORT| v1_coef = %g, v0_coef = %g\n", v1_coef, v0_coef);
     printf("DEBUG REPORT| a[1] = %g, comparing val = %g, diff = %g\n", a[1], r*a[3]/2.0 , fabs(a[1]-r*a[3]/2.0));
 #endif
 
-    //if (fabs(a[1] - a1_comparison) < epsilon){
     if (a[1] < r*a[3]/2.0){
         coefs_q1[0] = r/2.0 + v0_coef , coefs_q1[1] = a[3]/2.0 + v1_coef;
         coefs_q2[0] = r/2.0 - v0_coef , coefs_q2[1] = a[3]/2.0 - v1_coef;
@@ -134,7 +136,7 @@ int quartic_roots_of_unity(double r, double *root){
         root[3] = 0;
         return 2;
     }
-    root[1] = root[2] = root[4] = sqrt(-sqrt(r)/2);
+    root[1] = root[2] = root[4] = sqrt(sqrt(-r)/2);
     root[3] = -root[1];
     return 0;
 }
@@ -156,12 +158,17 @@ int squared_quadratic(double *a, double *root){
         q1 = quad_roots(b,root);
         root[3] = root[1];
         root[4] = root[2];
-        return (q1+q1);
+        if (q1==2){order(root,4);return 3;}
+        return 0;
     }
     b[0] = -qroot[1]; b[1] = 0; b[2] = 1;
     double c[] = {-qroot[2],0,1};
 
     q1 = quad_roots(b,root);
     q2 = quad_roots(c,root+2);
+    if (q1+q2 == 4){
+        order(root,4);
+    } else if (q1==0 && q2!=0){swap(root,2);}
     return(q1+q2);
 }
+/* --------------------------------------------------------------------------- */

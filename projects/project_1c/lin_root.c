@@ -3,7 +3,7 @@
 
 /* Computes the root for a linear equation */
 int lin_root(double *a, double *root) {
-	/* Bhageria, Yadu, M3SC */
+	/* Bhageria, Yadu, 00733164, M3SC */
 
 	if (a[1]==0){
 		if (a[0]==0){
@@ -12,6 +12,6 @@ int lin_root(double *a, double *root) {
 			return(-1); // contradictory
 		}
 	}
-	root[0] = a[0] == 0 ? 0 : -a[0]/a[1]; // real root
+	root[1] = a[0] == 0 ? 0 : -a[0]/a[1]; // real root
 	return(1);
 }

@@ -21,11 +21,17 @@ int rcubic_roots(double *a, double *root){
     double alpha,beta,p,y,alpha_coef;
     double p2=3.0*cbrt(0.25),y2 = -cbrt(0.5);
 
+/* Cases where reducing the polynomial is uncessary */
     if (a[2] == zero && a[1] == zero && a[0] == zero) { /* a[2]=a[1]=a[0]=0. So x^3 = 0 => root[1]=root[2]=root[3]=0 */
-        root[1]=zero;
+        root[3]=root[2]=root[1]=zero;
         return(1);
     } else if (a[2] == zero && a[1] == zero) { /* Part 3 i */
         return(roots_of_unity(cbrt(-a[0]),root));
+    } else if ( a[0]==zero && a[1]==zero ){ /* Linear equation with 2 roots equal to zero */
+        root[1] = root[2] = zero;
+        root[3] = -a[2];
+        order(root,3);
+        return 2;
     } else if (a[0] == zero) { /* Part 3 ii */
         root[1] = zero;
         return(roots_return(one,a[2],a[1],root));
@@ -42,19 +48,31 @@ int rcubic_roots(double *a, double *root){
             return root[1]==root[2] || root[2]==root[3] ? 2 : 3;
         }
     } else if ( fabs(3.0*a[1]-a[2]*a[2]) < DBL_EPSILON && fabs(27.0*a[0]-a[2]*a[2]*a[2]) < DBL_EPSILON ){ /* Part 3 iv */
-        root[1] = -a[2]/3.0;
+        root[3] = root[2] = root[1] = -a[2]/3.0;
         return(1);
     }
+/* End of Cases */
 
     beta=-a[2]/three;
     if (fabs(beta)>one) {
         alpha_coef = cbrt(two - (a[1]/beta)/beta - ((a[0]/beta)/beta)/beta );
         alpha = beta * alpha_coef;
-        p = (three-(a[1]/beta)/beta)/(alpha_coef*alpha_coef);
+        p = ((three / alpha_coef) / alpha_coef) - ((a[1] / alpha) / alpha);
+        //p = (three-(a[1]/beta)/beta)/(alpha_coef*alpha_coef);
     } else {
         alpha = cbrt(two*beta*beta*beta - a[1]*beta - a[0]);
-        p = (three*beta*beta-a[1])/(alpha*alpha);
+        p = ((three*beta*beta - a[1]) / alpha) / alpha;
     }
+#ifdef DEBUG
+    printf("DEBUG REPORT| In RCubic_Roots\n");
+    printf("DEBUG REPORT| beta = %.20g\n", beta);
+    printf("DEBUG REPORT| alpha = %.20g\n", alpha);
+    printf("DEBUG REPORT| p  = %.20g\n", p);
+    printf("DEBUG REPORT| p2 = %.20g\n", p2);
+    printf("DEBUG REPORT| diff = %.20g\n", fabs(p-p2));
+    printf("DEBUG REPORT| allowed = %.20g\n", 10*DBL_EPSILON);
+    printf("DEBUG REPORT| Exitted RCubic_Root\n");
+#endif
 
     if (alpha == zero){ /* When our degeneration doesn't makes sense */
         root[1] = beta;
@@ -75,8 +93,19 @@ int rcubic_roots(double *a, double *root){
         y=newton_rapheson(p);
         root[1]= alpha*y + beta;
     }
+
     root[1] = fabs(root[1])<10*DBL_EPSILON ? 0.0 : root[1];
-    return(roots_return(one, a[2]+(root[1]), (root[1]==zero)? a[1] : -a[0]/(root[1]) , root));
+    int return_val = roots_return(one, a[2]+(root[1]), (root[1]==zero)? a[1] : -a[0]/(root[1]) , root);
+    /* Makes sure that if 2 real roots are close and p was close to p2 when the
+     program thinks there are 3 reals roots then to use case of p=p2 */
+    if (return_val==3 && fabs(p-p2)<1e-10 && (fabs(root[1]-root[2])<1e-5 || fabs(root[2]-root[3])<1e-5 )){
+        root[1] = alpha*y2 + beta;
+        root[2] = alpha*y2 + beta;
+        root[3] = alpha/(y2*y2) + beta;
+        order(root,3);
+        return root[1]==root[2] || root[2]==root[3] ? 2 : 3;
+    }
+    return(return_val);
 }
 /* --------------------------------------------------------------------------- */
 

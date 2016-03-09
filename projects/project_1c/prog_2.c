@@ -18,10 +18,9 @@ int main(void) {
 	scanf("%lf %lf %lf %lf",&a[3],&a[2],&a[1],&a[0]);
 	printf("\n");
 
-
 	int quartic_case = rquartic_roots(a,root);
 	printf("case: %d\n", quartic_case);
-    printf("roots: %g, %g, %g, %g\n", root[1],root[2],root[3],root[4]);
+    printf("roots: %.10g, %.10g, %.10g, %.10g\n", root[1],root[2],root[3],root[4]);
 }
 /* --------------------------------------------------------------------------- */
 

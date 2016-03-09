@@ -18,7 +18,7 @@ int main(void) {
 
 	a[2] = 0;
 	a[0] = -1.0;
-	printf("    b ,      t[1] ,      t[2] ,      t[3] ,      t[4] ,    phi[1] ,    phi[2] ,    phi[3] ,    phi[4]\n");
+	printf("    b ,  case ,      t[1] ,      t[2] ,      t[3] ,      t[4] ,    phi[1] ,    phi[2] ,    phi[3] ,    phi[4]\n");
 
     for (b=0.05; b<1; b=b+0.05){
 		a[3] = 2.0*(X + 1.0 - b*b)/(b*Y);
@@ -34,10 +34,10 @@ int main(void) {
 
 		switch (quartic_case) {
 			case 0: printf("%5.2f\n", b); break;
-			case 1: printf("%5.2f , %9.4f , %9.4f , %9.4f , %9.4f , %9.4f , %9.4f , %9.4f , %9.4f\n", b, t[1],t[2],t[3],t[4],phi[1],phi[2],phi[3],phi[4]); break;
-			case 2: printf("%5.2f , %9.4f , %9.4f ,           ,           , %9.4f , %9.4f ,\n", b, t[1],t[2],phi[1],phi[2]); break;
-			case 3: printf("%5.2f , %9.4f , %9.4f , %9.4f , %9.4f , %9.4f , %9.4f , %9.4f , %9.4f\n", b, t[1],t[2],t[3],t[4],phi[1],phi[2],phi[3],phi[4]); break;
-			case 4: printf("%5.2f , %9.4f , %9.4f , %9.4f , %9.4f , %9.4f , %9.4f , %9.4f , %9.4f\n", b, t[1],t[2],t[3],t[4],phi[1],phi[2],phi[3],phi[4]); break;
+			case 1: printf("%5.2f , %5d , %9.4f , %9.4f , %9.4f , %9.4f , %9.4f , %9.4f , %9.4f , %9.4f\n", b, quartic_case, t[1],t[2],t[3],t[4],phi[1],phi[2],phi[3],phi[4]); break;
+			case 2: printf("%5.2f , %5d , %9.4f , %9.4f ,           ,           , %9.4f , %9.4f ,\n", b, quartic_case, t[1],t[2],phi[1],phi[2]); break;
+			case 3: printf("%5.2f , %5d , %9.4f , %9.4f , %9.4f , %9.4f , %9.4f , %9.4f , %9.4f , %9.4f\n", b, quartic_case, t[1],t[2],t[3],t[4],phi[1],phi[2],phi[3],phi[4]); break;
+			case 4: printf("%5.2f , %5d , %9.4f , %9.4f , %9.4f , %9.4f , %9.4f , %9.4f , %9.4f , %9.4f\n", b, quartic_case, t[1],t[2],t[3],t[4],phi[1],phi[2],phi[3],phi[4]); break;
 		}
 	}
 }
