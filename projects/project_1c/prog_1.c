@@ -10,13 +10,15 @@ void print_statements(); //contained in the quad_roots.c file
 
 int main(void) {
 	/* Bhageria, Yadu, 00733164, M3SC */
-	print_statements();
+	//print_statements();
 	double  a[3],root[4];
 	int lin_case, quad_case, cubic_case, poly;
 
-	printf("Choose the degree of polynomial to be tested (1,2,3): ");
-	scanf("%d", &poly);
-	printf("\n");
+	//printf("Choose the degree of polynomial to be tested (1,2,3): ");
+	//scanf("%d", &poly);
+	//printf("\n");
+	poly = 3;
+
 
 	switch (poly){
 		case 1: {
@@ -46,7 +48,7 @@ int main(void) {
 		printf("\n");
 		cubic_case = rcubic_roots(a,root);
 		printf("Cubic_case: %d\n", cubic_case);
-		printf("     Roots: %g %g %g\n", root[1], root[2], root[3]);
+		printf("     Roots: %.15g %.15g %.15g\n", root[1], root[2], root[3]);
 		break;}
 
 	}

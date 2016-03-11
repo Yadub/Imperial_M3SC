@@ -71,18 +71,31 @@ int rcubic_roots(double *a, double *root){
     printf("DEBUG REPORT| p2 = %.20g\n", p2);
     printf("DEBUG REPORT| diff = %.20g\n", fabs(p-p2));
     printf("DEBUG REPORT| allowed = %.20g\n", 10*DBL_EPSILON);
-    printf("DEBUG REPORT| Exitted RCubic_Root\n");
+    printf("DEBUG REPORT| 1/alpha = %.20g\n", fabs(1.0/alpha));
+    printf("DEBUG REPORT| allowed = %.20g\n", 1e-10);
+    printf("DEBUG REPORT| satisfied: %d\n", (fabs(1.0/alpha) < 1e-6)?:1);
 #endif
 
     if (alpha == zero){ /* When our degeneration doesn't makes sense */
         root[1] = beta;
         return(roots_return(one,-two*beta,-two*beta*beta+a[1],root));
-    } else if ( fabs(p - p2) < 10.0*DBL_EPSILON && fabs(1.0/alpha) > 10e-10){ /* Part 3 v: we choose 10.0*DBL_EPSILON as we loose accuracy in the calculation of alpha, beta, and p. */
-        root[1] = alpha*y2 + beta;
-        root[2] = alpha*y2 + beta;
-        root[3] = alpha/(y2*y2) + beta;
+    } else if ( fabs(p - p2) < 10.0*DBL_EPSILON && fabs(alpha) < 1e9 ){ /* Part 3 v: we choose 10.0*DBL_EPSILON as we loose accuracy in the calculation of alpha, beta, and p. */
+#ifdef DEBUG
+        printf("DEBUG REPORT| Using p close to p2 case\n");
+#endif
+        //root[3] = alpha/(y2*y2) + beta;
+        if (fabs(alpha)>fabs(beta)){
+            root[2] = root[1] = -2*a[0]/a[1];
+            /* sqrt((three*beta*beta - a[1])/3.0) + beta and so the beta cancels with itself*/
+        } else {
+            root[2] = root[1] = alpha*y2 + beta;
+            /*if (fabs(alpha) > 1e6){
+                root[3] = (-a[0]/root[1])/root[2];
+            }*/
+        }
+        root[3] = (-a[0]/root[1])/root[2];
         order(root,3);
-        return root[1]==root[2] || root[2]==root[3] ? 2 : 3;
+        return root[1]==root[3] ? 1 : 2;
     } else if (p==zero) {
         roots_of_unity(one,root);
         root[1] = alpha * (root[1]) + beta;
@@ -90,11 +103,16 @@ int rcubic_roots(double *a, double *root){
         root[3] = fabs(alpha * root[3]);
             return(0);
     } else {
+#ifdef DEBUG
+        printf("DEBUG REPORT| Using Newton-Rapheson\n");
+#endif
         y=newton_rapheson(p);
         root[1]= alpha*y + beta;
     }
-
     root[1] = fabs(root[1])<10*DBL_EPSILON ? 0.0 : root[1];
+#ifdef DEBUG
+    printf("DEBUG REPORT| root1 = %g\n", root[1]);
+#endif
     int return_val = roots_return(one, a[2]+(root[1]), (root[1]==zero)? a[1] : -a[0]/(root[1]) , root);
     /* Makes sure that if 2 real roots are close and p was close to p2 when the
      program thinks there are 3 reals roots then to use case of p=p2 */
