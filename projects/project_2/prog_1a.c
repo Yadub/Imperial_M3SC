@@ -1,0 +1,39 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+/* -Functions-needed-from-other-files----------------------------------------- */
+void print_statements(); //contained in the gauss.c file
+void print_vector(double *, int);
+double *allocate_vector(int);
+double **allocate_matrix(int);
+double *Gauss(double **, double *, int);
+/* --------------------------------------------------------------------------- */
+
+int main(void) {
+    double N = 3;
+    int i,j;
+
+    double *Y = allocate_vector(N);
+    Y[1] = Y[2] = Y[3] = 2;
+
+    double **A = allocate_matrix(N);
+
+    for (i=1; i<=N; i++){ //print to see what it is
+        for (j=1;j<N+1;j++){
+            A[i][j]=0.0;
+        }
+    }
+    for (i=1; i<=N; i++){
+        A[i][i]=-2.0;
+        if (i!=N){
+            A[i][i+1]=1.0;
+            A[i+1][i]=1.0;
+        }
+    }
+    double * x = Gauss(A,Y,N);
+
+    printf("The returned vector is\n");
+    print_vector(x,N);
+
+}
