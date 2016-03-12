@@ -27,16 +27,18 @@ double *Gauss(double **A, double *y, int N){
 /*
     Decompose A
 */
-    for (i=1; i<N+1; i++){
+    for (i=1; i<N; i++){
         ratio = A[i][i];
         if (ratio!=1.0){
             for (j=i; j<N+1; j++){
                 A[i][j] /= ratio;
-                y[i] /= ratio;
             }
+            y[i] /= ratio;
         }
+        printf("Division Over\n");
+        print_matrix(A,N);
+        print_vector(y,N);
         for (j=i+1; j<N+1; j++){
-
             if (A[j][i]!=0){
                 ratio = A[j][i]/A[i][i];
                 for (k=1; k<N+1; k++){
@@ -45,23 +47,27 @@ double *Gauss(double **A, double *y, int N){
                 y[j] -= ratio*y[i];
             }
         }
+        printf("Substraction over\n");
+        print_matrix(A,N);
+        print_vector(y,N);
     }
 #ifdef DEBUG
     print_matrix(A,N);
+    print_vector(y,N);
 #endif
 /*
     Substitute back in
 */
 double sum;
-x[N] = y[N]/A[N][N];
-for (i=N-1; i>0; i--){
-    sum = 0.0;
-    sum += y[i]/A[i][i];
-    for (j=N; j>i; j--){
-        sum += A[i][j]*x[j];
+    x[N] = y[N]/A[N][N];
+    for (i=N-1; i>0; i--){
+        sum = 0.0;
+        sum += y[i];
+        for (j=N; j>i; j--){
+            sum -= A[i][j]*x[j];
+        }
+        x[i] = sum/A[i][i];
     }
-    x[i] = sum;
-}
     return(x);
 }
 /* --------------------------------------------------------------------------- */
