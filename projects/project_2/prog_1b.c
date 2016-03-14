@@ -1,25 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 
 /* -Functions-needed-from-other-files----------------------------------------- */
 void print_statements(); //contained in the gauss.c file
 void print_vector(double *, int);
 double *allocate_vector(int);
-double **allocate_matrix(int);
+double **allocate_matrix(int, int);
 double *Gauss(double **, double *, int);
 /* --------------------------------------------------------------------------- */
 
 int main(void) {
-    double N = 8;
+    int N = 8;
     int i,j;
+    clock_t start, end;
 
     double *Y = allocate_vector(N);
     for (i=1; i<N+1; i++){
         Y[i] = i;
     }
 
-    double **A = allocate_matrix(N);
+    double **A = allocate_matrix(N,N);
 
     for (i=1; i<=N; i++){ //print to see what it is
         for (j=1;j<N+1;j++){
@@ -44,9 +46,12 @@ int main(void) {
 
     A[8][6] = 2.0;
 
+    start = clock();
     double * x = Gauss(A,Y,N);
+    end = clock();
+    double time_taken = ((double)end-start)/CLOCKS_PER_SEC;
+    printf("Time taken: %f\n", time_taken);
 
     printf("The returned vector is\n");
     print_vector(x,N);
-
 }

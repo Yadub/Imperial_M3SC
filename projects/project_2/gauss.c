@@ -1,15 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <omp.h>
 
 /* Yadu Bhageria, 00733164, M3SC */
+#ifdef COUNT
+#define COUNTPP count++
+#else
+#define COUNTPP
+#endif
 
 /* -Functions-needed-from-other-files----------------------------------------- */
-
-/* -Functions-implemented-in-current-file------------------------------------- */
 void print_statements();
 void print_vector(double *, int);
-void print_matrix(double **, int);
+void print_matrix(double **, int, int);
+double *allocate_vector(int);
+/* -Functions-implemented-in-current-file------------------------------------- */
 double *Gauss(double **, double *, int);
 /* --------------------------------------------------------------------------- */
 
@@ -17,111 +23,54 @@ double *Gauss(double **A, double *y, int N){
     /* Yadu Bhageria, 00733164, M3SC */
     int i,j,k;
     double ratio;
-    double * x = y;
-    //double * y_temp = y;
-    //double ** A_temp = A;
+    int count = 0;
+    double *x = allocate_vector(N);
 #ifdef DEBUG
+    printf("\nDEBUG REPORT| Inputted Values (A and y)\n");
     print_vector(y,N);
-    print_matrix(A,N);
+    print_matrix(A,N,N);
 #endif
 /*
-    Decompose A
+    Decompose A along with y
 */
     for (i=1; i<N; i++){
-        ratio = A[i][i];
-        if (ratio!=1.0){
-            for (j=i; j<N+1; j++){
-                A[i][j] /= ratio;
-            }
-            y[i] /= ratio;
-        }
-        printf("Division Over\n");
-        print_matrix(A,N);
-        print_vector(y,N);
         for (j=i+1; j<N+1; j++){
             if (A[j][i]!=0){
                 ratio = A[j][i]/A[i][i];
+                #pragma omp parallel for
                 for (k=1; k<N+1; k++){
                     A[j][k] -= ratio*A[i][k];
+                    COUNTPP;
                 }
                 y[j] -= ratio*y[i];
+                COUNTPP;
             }
         }
-        printf("Substraction over\n");
-        print_matrix(A,N);
-        print_vector(y,N);
     }
+/*
+    Substitute back in to get x
+*/
 #ifdef DEBUG
-    print_matrix(A,N);
+    printf("DEBUG REPORT| Converted Values (A and y)\n" );
+    print_matrix(A,N,N);
     print_vector(y,N);
+    printf("DEBUG REPORT| Reduction count = %d\n\n", count);
 #endif
-/*
-    Substitute back in
-*/
-double sum;
     x[N] = y[N]/A[N][N];
+    COUNTPP;
     for (i=N-1; i>0; i--){
-        sum = 0.0;
-        sum += y[i];
+        x[i] += y[i];
+        COUNTPP;
+        #pragma omp parallel for
         for (j=N; j>i; j--){
-            sum -= A[i][j]*x[j];
+            x[i] -= A[i][j]*x[j];
+            COUNTPP;
         }
-        x[i] = sum/A[i][i];
+        x[i] /= A[i][i];
+        COUNTPP;
     }
+#ifdef COUNT
+    printf("DEBUG REPORT| count = %d\n\n", count);
+#endif
     return(x);
-}
-/* --------------------------------------------------------------------------- */
-
-void print_statements(){
-    /* Bhageria, Yadu, 00733164, M3SC */
-    printf(  "         Name: Bhageria, Yadu");
-    printf("\n          CID: 00733164");
-	printf("\n  Course Code: 00733164, M3SC");
-    printf("\nEmail Address: yrb13@ic.ac.uk");
-    printf("\n         Time: %s ",__TIME__);
-    printf("\n         Date: %s ",__DATE__);
-    printf("\n \n");
-}
-/* --------------------------------------------------------------------------- */
-
-void print_matrix(double **A, int N){
-    /* Yadu Bhageria, 00733164, M3SC */
-/*
-    Extremely useful for debugging
-*/
-    for(int i=1; i<N+1; i++){
-        for(int j=1; j<N+1; j++){
-            printf("%5.3g ", A[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-}
-/* --------------------------------------------------------------------------- */
-
-void print_vector(double *x, int N){
-    /* Yadu Bhageria, 00733164, M3SC */
-    for (int i=1; i<N+1; i++){
-        printf("%5.3g\n", x[i]);
-    }
-    printf("\n");
-}
-/* --------------------------------------------------------------------------- */
-
-double **allocate_matrix(int N){
-    /* Yadu Bhageria, 00733164, M3SC */
-    double ** A;
-    A=(double **) malloc(N*sizeof(double *));
-    for(int i=1; i<N+1; i++){
-        A[i]=(double *) malloc(2*N*sizeof(double));
-    }
-    return A;
-}
-/* --------------------------------------------------------------------------- */
-
-double *allocate_vector(int N){
-    /* Yadu Bhageria, 00733164, M3SC */
-    double *X;
-    X = (double *) malloc(N*sizeof(double));
-    return X;
 }
