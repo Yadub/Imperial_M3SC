@@ -35,6 +35,10 @@ double *Gauss(double **A, double *y, int N){
 */
 
     for (i=1; i<N; i++){
+        if (A[i][i]==0){
+            printf("ERROR| Zero on the diagonal of A during Guassian Elimiation. Considering it as singular and exitting.\n");
+            exit(-1);
+        }
         #pragma omp parallel for
         for (j=i+1; j<N+1; j++){
             if (A[j][i]!=0){

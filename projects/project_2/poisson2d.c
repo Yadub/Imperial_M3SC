@@ -20,6 +20,7 @@ double *BGauss(double **, double *, int, int);
 /* --------------------------------------------------------------------------- */
 
 int main(void) {
+    /* Yadu Bhageria, 00733164, M3SC */
     int i,i1,i2,N,gauss;
 /*
     Values of 2^n
@@ -33,7 +34,7 @@ int main(void) {
     2^23 = 8388608
     2^20 = 1048576
 */
-    printf("Enter 0 for Gauss and anything else for BGuasss: ");
+    printf("Enter 0 for Gauss and anything else for BGauss: ");
     scanf("%d",&gauss);
     printf("Enter range of exponents of 2 to run for (i1 i2): ");
     scanf("%d %d", &i1, &i2);
@@ -52,6 +53,7 @@ int main(void) {
 }
 /* --------------------------------------------------------------------------- */
 void solve_2d_bgauss(int N, bool smooth){
+    /* Yadu Bhageria, 00733164, M3SC */
     int i,j, B=N-1, grid_size = (N-1)*(N-1);
     clock_t start, end;
 
@@ -143,6 +145,7 @@ void solve_2d_bgauss(int N, bool smooth){
 
 /* --------------------------------------------------------------------------- */
 void solve_2d_gauss(int N, bool smooth){
+    /* Yadu Bhageria, 00733164, M3SC */
     int i,j,grid_size = (N-1)*(N-1);
     clock_t start, end;
 

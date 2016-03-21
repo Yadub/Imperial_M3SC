@@ -34,7 +34,10 @@ double *BGauss(double **A, double *y, int N, int B){
     Decompose A along wtih y
 */
     for (i=1; i<N; i++){
-        if (A[i][B+1]==0.0){printf("Middle Band contains zero value\n");break;}
+        if (A[i][B+1]==0.0){
+            printf("ERROR| Middle Band contains zero value. Condering matrix as Singular and exitting.\n");
+            exit(-1);
+        }
         else{
             #pragma omp for
             for (j=1; j<B+1; j++){

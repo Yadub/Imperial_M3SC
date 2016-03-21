@@ -3,7 +3,6 @@
 #include <math.h>
 
 /* --------------------------------------------------------------------------- */
-
 void print_statements(){
     /* Bhageria, Yadu, 00733164, M3SC */
     printf(  "         Name: Bhageria, Yadu");
@@ -15,7 +14,6 @@ void print_statements(){
     printf("\n \n");
 }
 /* --------------------------------------------------------------------------- */
-
 void print_matrix(double **A, int N, int M){
     /* Yadu Bhageria, 00733164, M3SC */
 /*
@@ -30,7 +28,6 @@ void print_matrix(double **A, int N, int M){
     printf("\n");
 }
 /* --------------------------------------------------------------------------- */
-
 void print_vector(double *x, int N){
     /* Yadu Bhageria, 00733164, M3SC */
     for (int i=1; i<N+1; i++){
@@ -50,7 +47,6 @@ void print_2dvector(double *x, int N, int M){
     printf("\n");
 }
 /* --------------------------------------------------------------------------- */
-
 double **allocate_matrix(int N, int M){
     /* Yadu Bhageria, 00733164, M3SC */
 
@@ -72,7 +68,6 @@ double **allocate_matrix(int N, int M){
     return A;*/
 }
 /* --------------------------------------------------------------------------- */
-
 double *allocate_zero_vector(int N){
     /* Yadu Bhageria, 00733164, M3SC */
     double *X;
@@ -81,6 +76,7 @@ double *allocate_zero_vector(int N){
 }
 /* --------------------------------------------------------------------------- */
 int maxvalpos_vec(double * X, int N){
+    /* Yadu Bhageria, 00733164, M3SC */
     double maxvalue=X[1];
     int xpos = 1;
     for(int i=2; i<N+1; i++){
@@ -93,6 +89,7 @@ int maxvalpos_vec(double * X, int N){
 }
 /* --------------------------------------------------------------------------- */
 void free_matrix(double **A, int N){
+    /* Yadu Bhageria, 00733164, M3SC */
     //for the safe approach
     for (int i=N; i>0; i--) free(A[i]);
 /*

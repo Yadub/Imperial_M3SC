@@ -19,6 +19,7 @@ double *BGauss(double **, double *, int, int);
 /* --------------------------------------------------------------------------- */
 
 int main(void) {
+    /* Yadu Bhageria, 00733164, M3SC */
     int i,i1,i2,N,gauss;
 /*
     Values of 2^n
@@ -58,6 +59,7 @@ int main(void) {
 /* --------------------------------------------------------------------------- */
 
 void solve_1d_bgauss(int N, bool smooth){
+    /* Yadu Bhageria, 00733164, M3SC */
     int i, B=1;
     clock_t start, end;
 
@@ -106,6 +108,7 @@ void solve_1d_bgauss(int N, bool smooth){
 /* --------------------------------------------------------------------------- */
 
 void solve_1d_gauss(int N, bool smooth){
+    /* Yadu Bhageria, 00733164, M3SC */
     int i;
     clock_t start, end;
 
