@@ -23,7 +23,7 @@ void print_matrix(double **A, int N, int M){
 */
     for(int i=1; i<N+1; i++){
         for(int j=1; j<M+1; j++){
-            printf("%8.5g ", A[i][j]);
+            printf("%3.1g ", A[i][j]);
         }
         printf("\n");
     }
@@ -34,7 +34,18 @@ void print_matrix(double **A, int N, int M){
 void print_vector(double *x, int N){
     /* Yadu Bhageria, 00733164, M3SC */
     for (int i=1; i<N+1; i++){
-        printf("%8.5g\n", x[i]);
+        printf("%3d | %12.4g\n",i, x[i]);
+    }
+    printf("\n");
+}
+/* --------------------------------------------------------------------------- */
+void print_2dvector(double *x, int N, int M){
+    /* Yadu Bhageria, 00733164, M3SC */
+    for (int j=1; j<M+1; j++){
+        for (int i=1; i<N+1; i++){
+            printf("%6.3g, ", x[(N)*(i-1)+j]);
+        }
+        printf("\n");
     }
     printf("\n");
 }
@@ -42,19 +53,50 @@ void print_vector(double *x, int N){
 
 double **allocate_matrix(int N, int M){
     /* Yadu Bhageria, 00733164, M3SC */
+
+    //The safe approach; better sizes over 2^27 in size
     double ** A;
     A=(double **) malloc((N+1)*sizeof(double *));
     for(int i=1; i<N+1; i++){
-        A[i]=(double *) malloc((M+1)*sizeof(double));
+        A[i]=(double *) calloc((M+1),sizeof(double));
     }
     return A;
+
+/*
+    //The cautious approach:
+    double **A; int i;
+    A = (double **)malloc((N+1)*sizeof(double *));
+    A[0] = (double *)calloc((N*M+1),sizeof(double));
+    A[1] = A[0];
+    for (i=2; i<=N; i++) A[i] = A[i-1]+M;
+    return A;*/
 }
 /* --------------------------------------------------------------------------- */
 
-double *allocate_vector(int N){
+double *allocate_zero_vector(int N){
     /* Yadu Bhageria, 00733164, M3SC */
     double *X;
     X = (double *) calloc((N+1),sizeof(double));
     return X;
 }
 /* --------------------------------------------------------------------------- */
+int maxvalpos_vec(double * X, int N){
+    double maxvalue=X[1];
+    int xpos = 1;
+    for(int i=2; i<N+1; i++){
+        if (X[i] > maxvalue){
+            maxvalue = X[i];
+            xpos = i;
+        }
+    }
+    return xpos;
+}
+/* --------------------------------------------------------------------------- */
+void free_matrix(double **A, int N){
+    //for the safe approach
+    for (int i=N; i>0; i--) free(A[i]);
+/*
+    //for the cautious approach
+    free(A[0]); free(A);
+*/
+}

@@ -6,7 +6,7 @@
 /* -Functions-needed-from-other-files----------------------------------------- */
 void print_statements(); //contained in the gauss.c file
 void print_vector(double *, int);
-double *allocate_vector(int);
+double *allocate_zero_vector(int);
 double **allocate_matrix(int, int);
 double *Gauss(double **, double *, int);
 /* --------------------------------------------------------------------------- */
@@ -16,7 +16,7 @@ int main(void) {
     int i,j;
     clock_t start, end;
 
-    double *Y = allocate_vector(N);
+    double *Y = allocate_zero_vector(N);
     Y[1] = Y[2] = Y[3] = 2;
 
     double **A = allocate_matrix(N,N);

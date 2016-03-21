@@ -14,17 +14,17 @@
 void print_statements();
 void print_vector(double *, int);
 void print_matrix(double **, int, int);
-double *allocate_vector(int);
+double *allocate_zero_vector(int);
+void free_matrix(double **);
 /* -Functions-implemented-in-current-file------------------------------------- */
 double *Gauss(double **, double *, int);
 /* --------------------------------------------------------------------------- */
 
 double *Gauss(double **A, double *y, int N){
     /* Yadu Bhageria, 00733164, M3SC */
-    int i,j,k;
-    double ratio;
+    int i,j;
     int count = 0;
-    double *x = allocate_vector(N);
+    double *x = allocate_zero_vector(N);
 #ifdef DEBUG
     printf("\nDEBUG REPORT| Inputted Values (A and y)\n");
     print_vector(y,N);
@@ -33,12 +33,13 @@ double *Gauss(double **A, double *y, int N){
 /*
     Decompose A along with y
 */
+
     for (i=1; i<N; i++){
+        #pragma omp parallel for
         for (j=i+1; j<N+1; j++){
             if (A[j][i]!=0){
-                ratio = A[j][i]/A[i][i];
-                #pragma omp parallel for
-                for (k=1; k<N+1; k++){
+                double ratio = A[j][i]/A[i][i];
+                for (int k=1; k<N+1; k++){
                     A[j][k] -= ratio*A[i][k];
                     COUNTPP;
                 }
@@ -61,7 +62,6 @@ double *Gauss(double **A, double *y, int N){
     for (i=N-1; i>0; i--){
         x[i] += y[i];
         COUNTPP;
-        #pragma omp parallel for
         for (j=N; j>i; j--){
             x[i] -= A[i][j]*x[j];
             COUNTPP;
