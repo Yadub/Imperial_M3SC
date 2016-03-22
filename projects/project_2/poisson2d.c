@@ -3,7 +3,10 @@
 #include <math.h>
 #include <time.h>
 #include <stdbool.h>
+#include <sys/time.h>
 
+
+double *make_Yvec2D(int, bool, double);
 void solve_2d_gauss(int, bool);
 void solve_2d_bgauss(int, bool);
 /* -Functions-needed-from-other-files----------------------------------------- */
@@ -36,16 +39,32 @@ int main(void) {
 */
     printf("Enter 0 for Gauss and anything else for BGauss: ");
     scanf("%d",&gauss);
-    printf("Enter range of exponents of 2 to run for (i1 i2): ");
-    scanf("%d %d", &i1, &i2);
 
-    printf("\n           N,     maxval,     maxval x,     maxval y,  time taken,   smooth?\n");
-    for (i=i1; i<=i2; i++){
+    printf("\nSolving using %s function\n", gauss==0 ? "Gauss" : "BGauss");
+    printf("           N|    maxval, maxval pos x, maxval pos y,    cpu time,   wall time,       speed|    maxval, maxval pos x, maxval pos y,    cpu time,   wall time,       speed|");
+    double n_val[] = {8,12,16,20,24,32,40,48,64,80,96};
+
+    for (i=1; i<=15; i++){
         N = pow(2,i);
         if (gauss == 0){
+            printf("\n%12d|", N);
             solve_2d_gauss(N,false);
             solve_2d_gauss(N,true);
         } else {
+            printf("\n%12d|", N);
+            solve_2d_bgauss(N,false);
+            solve_2d_bgauss(N,true);
+        }
+    }
+
+    for (i=1; i<=15; i++){
+        N = pow(2,i);
+        if (gauss == 0){
+            printf("\n%12d|", N);
+            solve_2d_gauss(N,false);
+            solve_2d_gauss(N,true);
+        } else {
+            printf("\n%12d|", N);
             solve_2d_bgauss(N,false);
             solve_2d_bgauss(N,true);
         }
@@ -56,55 +75,11 @@ void solve_2d_bgauss(int N, bool smooth){
     /* Yadu Bhageria, 00733164, M3SC */
     int i,j, B=N-1, grid_size = (N-1)*(N-1);
     clock_t start, end;
+    struct timeval wt_start, wt_end;
 
     double delta = 1.0/((double)N);
 
-    double *F = allocate_zero_vector( (N-1)*(N-1) );
-
-/* Making Y vec for rough */
-/*
-    for (j=1; j<N; j++){
-        if ((double)j/N <= 0.5 && (double)j/N >= 0.25){
-            for (i=1; i<N; i++){
-                if ((double)i/N <= 0.5 && (double)i/N >= 0.25){
-                    F[(N-1)*(j-1)+i] = -100.0*delta*delta;
-                }
-            }
-        }
-    }
-*/
-
-    for (j=1; j<N; j++){
-        if ((double)j/N == 0.5 || (double)j/N == 0.25){
-            for (i=1; i<N; i++){
-                if ((double)i/N == 0.5 || (double)i/N == 0.25){
-                    if (smooth == true){
-                        F[(N-1)*(j-1)+i] = -25.0*delta*delta;
-                    } else{
-                        F[(N-1)*(j-1)+i] = -100.0*delta*delta;
-                    }
-                } else if ((double)i/N <= 0.5 && (double)i/N >= 0.25){
-                    if (smooth == true){
-                        F[(N-1)*(j-1)+i] = -50.0*delta*delta;
-                    } else{
-                        F[(N-1)*(j-1)+i] = -100.0*delta*delta;
-                    }
-                }
-            }
-        } else if ((double)j/N < 0.5 && (double)j/N > 0.25){
-            for (i=1; i<N; i++){
-                if ((double)i/N == 0.5 || (double)i/N == 0.25){
-                    if (smooth == true){
-                        F[(N-1)*(j-1)+i] = -50.0*delta*delta;
-                    } else {
-                        F[(N-1)*(j-1)+i] = -100.0*delta*delta;
-                    }
-                } else if ((double)i/N <= 0.5 && (double)i/N >= 0.25){
-                    F[(N-1)*(j-1)+i] = -100.0*delta*delta;
-                }
-            }
-        }
-    }
+    double *F = make_Yvec2D(N-1,smooth,delta*delta);
 
     double **A_banded = allocate_matrix(grid_size,2*B+1);
 
@@ -122,25 +97,25 @@ void solve_2d_bgauss(int N, bool smooth){
             }
         }
     }
-    //print_vector(F,grid_size);
-    //print_matrix(A_banded,grid_size,2*B+1);
 
     start = clock();
-    time_t start_time = time(NULL);
+    gettimeofday(&wt_start,NULL);
     double * v = BGauss(A_banded,F,grid_size,B);
-    time_t end_time = time(NULL);
     end = clock();
-    double time_taken = ((double)end-start)/CLOCKS_PER_SEC;
-    double wall_time = (double)(end_time - start_time);
+    gettimeofday(&wt_end,NULL);
     free_matrix(A_banded, grid_size);
     free(F);
 
+    double time_taken = ((double)end-start)/CLOCKS_PER_SEC;
+    double wt_timetaken = (double)(wt_end.tv_sec - wt_start.tv_sec + (wt_end.tv_usec - wt_start.tv_usec)/1000000.0);
 
     int maxval_position = maxvalpos_vec(v, grid_size);
     int y_maxval = maxval_position % (N-1);
     int x_maxval = (maxval_position-y_maxval)/(N-1) + 1;
     //print_2dvector(v,N-1,N-1);
-    printf("%12d, %10.6f, %12.9g, %12.9g, %11.8f, %8s, %8.3f\n", N, v[maxval_position],(double)x_maxval/N, (double)y_maxval/N, time_taken, smooth ? "true": "false", wall_time);
+
+    double speed = 1e-9 * v[0] / wt_timetaken;
+    printf("%10.6f, %12.10f, %12.10f, %11.8f, %11.8f, %11.8f|", v[maxval_position]*delta, (double)x_maxval/N, (double)y_maxval/N, time_taken, wt_timetaken, speed);
 }
 
 /* --------------------------------------------------------------------------- */
@@ -148,45 +123,11 @@ void solve_2d_gauss(int N, bool smooth){
     /* Yadu Bhageria, 00733164, M3SC */
     int i,j,grid_size = (N-1)*(N-1);
     clock_t start, end;
+    struct timeval wt_start, wt_end;
 
     double delta = 1.0/((double)N);
-
-    double *F = allocate_zero_vector( (N-1)*(N-1) );
-
-    for (j=1; j<N; j++){
-        if ((double)j/N == 0.5 || (double)j/N == 0.25){
-            for (i=1; i<N; i++){
-                if ((double)i/N == 0.5 || (double)i/N == 0.25){
-                    if (smooth == true){
-                        F[(N-1)*(j-1)+i] = -25.0*delta*delta;
-                    } else{
-                        F[(N-1)*(j-1)+i] = -100.0*delta*delta;
-                    }
-                } else if ((double)i/N <= 0.5 && (double)i/N >= 0.25){
-                    if (smooth == true){
-                        F[(N-1)*(j-1)+i] = -50.0*delta*delta;
-                    } else{
-                        F[(N-1)*(j-1)+i] = -100.0*delta*delta;
-                    }
-                }
-            }
-        } else if ((double)j/N < 0.5 && (double)j/N > 0.25){
-            for (i=1; i<N; i++){
-                if ((double)i/N == 0.5 || (double)i/N == 0.25){
-                    if (smooth == true){
-                        F[(N-1)*(j-1)+i] = -50.0*delta*delta;
-                    } else {
-                        F[(N-1)*(j-1)+i] = -100.0*delta*delta;
-                    }
-                } else if ((double)i/N <= 0.5 && (double)i/N >= 0.25){
-                    F[(N-1)*(j-1)+i] = -100.0*delta*delta;
-                }
-            }
-        }
-    }
-
+    double *F = make_Yvec2D(N-1,smooth,delta*delta);
     double **A = allocate_matrix(grid_size,grid_size);
-
     for (i=1; i<N; i++){
         for (j=1; j<N; j++){
             A[(N-1)*(i-1)+j][(N-1)*(i-1)+j] = -4.0;
@@ -208,15 +149,14 @@ void solve_2d_gauss(int N, bool smooth){
             }
         }
     }
-    //print_vector(F,grid_size);
-    //print_matrix(A,grid_size,grid_size);
+
     start = clock();
-    time_t start_time = time(NULL);
+    gettimeofday(&wt_start,NULL);
     double * v = Gauss(A,F,grid_size);
-    time_t end_time = time(NULL);
+    gettimeofday(&wt_end,NULL);
     end = clock();
     double time_taken = ((double)end-start)/CLOCKS_PER_SEC;
-    double wall_time = (double)(end_time - start_time);
+    double wt_timetaken = (double)(wt_end.tv_sec - wt_start.tv_sec + (wt_end.tv_usec - wt_start.tv_usec)/1000000.0);
     free_matrix(A, grid_size);
     free(F);
 
@@ -224,5 +164,6 @@ void solve_2d_gauss(int N, bool smooth){
     int y_maxval = maxval_position % (N-1);
     int x_maxval = (maxval_position-y_maxval)/(N-1) + 1;
     //print_2dvector(v,N-1,N-1);
-    printf("%12d, %10.6f, %12.9g, %12.9g, %11.8f, %8s, %6.3f\n", N, v[maxval_position],(double)x_maxval/N, (double)y_maxval/N, time_taken, smooth ? "true": "false", wall_time);
+    double speed = 1e-9 * v[0] / wt_timetaken;
+    printf("%10.6f, %12.10f, %12.10f, %11.8f, %11.8f, %11.8f|", v[maxval_position]*delta, (double)x_maxval/N, (double)y_maxval/N, time_taken, wt_timetaken, speed);
 }

@@ -4,11 +4,6 @@
 #include <omp.h>
 
 /* Yadu Bhageria, 00733164, M3SC */
-#ifdef COUNT
-#define COUNTPP count++
-#else
-#define COUNTPP
-#endif
 
 /* -Functions-needed-from-other-files----------------------------------------- */
 void print_statements();
@@ -22,8 +17,8 @@ double *Gauss(double **, double *, int);
 
 double *Gauss(double **A, double *y, int N){
     /* Yadu Bhageria, 00733164, M3SC */
-    int i,j;
-    int count = 0;
+    int i,j, singular = 0;
+    unsigned long long int count = 0;
     double *x = allocate_zero_vector(N);
 #ifdef DEBUG
     printf("\nDEBUG REPORT| Inputted Values (A and y)\n");
@@ -33,24 +28,31 @@ double *Gauss(double **A, double *y, int N){
 /*
     Decompose A along with y
 */
-
-    for (i=1; i<N; i++){
+#pragma omp parallel private(i)
+{
+    for (i=1; i<N && singular!=1; i++){
         if (A[i][i]==0){
-            printf("ERROR| Zero on the diagonal of A during Guassian Elimiation. Considering it as singular and exitting.\n");
-            exit(-1);
+            printf("ERROR| Zero on the diagonal of the matrix during Guassian Elimiation. Considering it as singular, exitting Guass(), and returning a zero vector\n");
+            singular = 1;
         }
-        #pragma omp parallel for
+        #pragma omp for reduction(+:count)
         for (j=i+1; j<N+1; j++){
-            if (A[j][i]!=0){
+            if (A[j][i]!=0)
+            {
                 double ratio = A[j][i]/A[i][i];
-                for (int k=1; k<N+1; k++){
+                for (int k=1+i; k<N+1; k++){
                     A[j][k] -= ratio*A[i][k];
-                    COUNTPP;
+                    count += 2;
                 }
                 y[j] -= ratio*y[i];
-                COUNTPP;
+                count += 3;
             }
         }
+    }
+}
+/* Check if the matrix was considered singular and if so then return 0 */
+    if (singular==1){
+        return x;
     }
 /*
     Substitute back in to get x
@@ -59,22 +61,20 @@ double *Gauss(double **A, double *y, int N){
     printf("DEBUG REPORT| Converted Values (A and y)\n" );
     print_matrix(A,N,N);
     print_vector(y,N);
-    printf("DEBUG REPORT| Reduction count = %d\n\n", count);
+    printf("DEBUG REPORT| Reduction count = %d\n", count);
 #endif
     x[N] = y[N]/A[N][N];
-    COUNTPP;
+    count++;
     for (i=N-1; i>0; i--){
         x[i] += y[i];
-        COUNTPP;
         for (j=N; j>i; j--){
             x[i] -= A[i][j]*x[j];
-            COUNTPP;
+            count += 2;
         }
         x[i] /= A[i][i];
-        COUNTPP;
+        count +=2;
     }
-#ifdef COUNT
-    printf("DEBUG REPORT| count = %d\n\n", count);
-#endif
-    return(x);
+    x[0] = (double) count;
+
+    return x;
 }
