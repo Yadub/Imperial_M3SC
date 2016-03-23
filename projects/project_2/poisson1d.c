@@ -25,18 +25,6 @@ int main(void) {
     /* Yadu Bhageria, 00733164, M3SC */
     int i,i1,i2,N,gauss;
     print_statements();
-/*
-    Values of 2^n
-    2^30 = 1073741824
-    2^29 = 536870912
-    2^28 = 268435456
-    2^27 = 134217728
-    2^26 = 67108864
-    2^25 = 33554432
-    2^24 = 16777216
-    2^23 = 8388608
-    2^20 = 1048576
-*/
 
     printf("Enter 0 for Gauss and anything else for BGuasss: ");
     scanf("%d",&gauss);
@@ -58,12 +46,10 @@ int main(void) {
             solve_1d_bgauss(N,false);
             solve_1d_bgauss(N,true);
         }
-
     }
     printf("\n");
 }
 /* --------------------------------------------------------------------------- */
-
 void solve_1d_bgauss(int N, bool smooth){
     /* Yadu Bhageria, 00733164, M3SC */
     int B=1;
@@ -90,12 +76,11 @@ void solve_1d_bgauss(int N, bool smooth){
     int maxval_position = maxvalpos_vec(x, N-1);
     //multiply_vec(x,N-1,delta);
     double speed = 1e-9 * x[0] / wt_timetaken;
-    
-    printf("%10.6f, %12.10f, %11.8f, %11.8f, %11.8f|", x[maxval_position]*delta, (double)maxval_position/N, timetaken, wt_timetaken, speed);
 
+    printf("%10.6f, %12.10f, %11.8f, %11.8f, %11.8f|", x[maxval_position]*delta, (double)maxval_position/N, timetaken, wt_timetaken, speed);
+    free(x);
 }
 /* --------------------------------------------------------------------------- */
-
 void solve_1d_gauss(int N, bool smooth){
     /* Yadu Bhageria, 00733164, M3SC */
     clock_t start, end;
@@ -122,7 +107,8 @@ void solve_1d_gauss(int N, bool smooth){
 
     double speed = 1e-9 * x[0] / wt_timetaken;
 
+    //printf("\n%f\n", x[0]);
     printf("%10.6f, %12.10f, %11.8f, %11.8f, %11.8f|", x[maxval_position]*delta, (double)maxval_position/N, timetaken, wt_timetaken, speed);
-
+    free(x);
 }
 /* --------------------------------------------------------------------------- */

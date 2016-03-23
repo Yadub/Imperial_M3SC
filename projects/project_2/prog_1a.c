@@ -15,6 +15,7 @@ int main(void) {
     int N = 3;
     int i,j;
     clock_t start, end;
+    print_statements();
 
     double *Y = allocate_zero_vector(N);
     Y[1] = Y[2] = Y[3] = 2;
@@ -26,7 +27,7 @@ int main(void) {
         }
     }
     for (i=1; i<=N; i++){
-        A[i][i]=-0.0;
+        A[i][i]=-2.0;
         if (i!=N){
             A[i][i+1]=1.0;
             A[i+1][i]=1.0;

@@ -20,15 +20,10 @@ double *BGauss(double **A, double *y, int N, int B){
     int i,j,singular = 0;
     unsigned long long int count = 0;
     double *x = allocate_zero_vector(N);
-#ifdef DEBUG
-    printf("DEBUG REPORT| Inputted Values (A and y)\n");
-    print_vector(y,N);
-    print_matrix(A,N,2*B+1);
-#endif
 /*
     Decompose A along wtih y
 */
-#pragma omp parallel private(i) if(B>25)
+#pragma omp parallel private(i) if(B>128)
 {
     for (i=1; i<N && singular!=1; i++){
         if (A[i][B+1]==0.0){
@@ -36,7 +31,7 @@ double *BGauss(double **A, double *y, int N, int B){
             singular = 1;
         }
         else{
-            #pragma omp for reduction(+:count)
+            #pragma omp for
             for (j=1; j<B+1; j++){
                 if (j<N+1-i){
                     double ratio = A[i+j][B+1-j]/A[i][B+1];
@@ -58,15 +53,6 @@ double *BGauss(double **A, double *y, int N, int B){
 /*
     Substitute back in to get x
 */
-#ifdef DEBUG
-    printf("DEBUG REPORT| Converted Values (A and y)\n" );
-    print_matrix(A,N,2*B+1);
-    print_vector(y,N);
-    printf("DEBUG REPORT| Reduction count = %d\n", count);
-#endif
-/*
-Substitute back in to get x
-*/
     x[N] = y[N]/A[N][B+1];
     for (i=N-1; i>0; i--){
         x[i] += y[i];
@@ -83,3 +69,4 @@ Substitute back in to get x
 
     return(x);
 }
+/* --------------------------------------------------------------------------- */

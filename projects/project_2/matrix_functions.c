@@ -150,7 +150,7 @@ double **make_ABGauss1D(int N, int B){
     }
     return A;
 }
-
+/* --------------------------------------------------------------------------- */
 double *make_Yvec2D(int N, bool smooth, double delta){
     int i,j;
     double *F = allocate_zero_vector( (N-1)*(N-1) );
@@ -180,11 +180,33 @@ double *make_Yvec2D(int N, bool smooth, double delta){
                         F[(N-1)*(j-1)+i] = -100.0*delta;
                     }
                 } else if ((double)i/N <= 0.5 && (double)i/N >= 0.25){
-                    F[(N-1)*(j-1)+i] = -100.0*delta*delta;
+                    F[(N-1)*(j-1)+i] = -100.0*delta;
                 }
             }
         }
     }
     return F;
+}
+/* --------------------------------------------------------------------------- */
+void contour_print(double *x, int N){
+    /* Yadu Bhageria, 00733164, M3SC */
+    int i,j;
+    int nby32 = N/32;
+    for (i=0; i<=32; i++){
+        printf("     0.0,");
+    }
+    printf("\n");
+    for (i=1; i<32; i++){
+        printf("     0.0,");
+        for (j=1; j<32; j++){
+            printf("%8.5f,", x[(N-1)*(i*nby32-1)+j*nby32]);
+        }
+        printf("     0.0,\n");
+    }
+    printf("\n");
+    for (i=0; i<=32; i++){
+        printf("     0.0,");
+    }
+
 }
 /* --------------------------------------------------------------------------- */

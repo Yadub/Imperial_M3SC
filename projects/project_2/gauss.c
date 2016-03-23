@@ -20,11 +20,6 @@ double *Gauss(double **A, double *y, int N){
     int i,j, singular = 0;
     unsigned long long int count = 0;
     double *x = allocate_zero_vector(N);
-#ifdef DEBUG
-    printf("\nDEBUG REPORT| Inputted Values (A and y)\n");
-    print_vector(y,N);
-    print_matrix(A,N,N);
-#endif
 /*
     Decompose A along with y
 */
@@ -35,7 +30,7 @@ double *Gauss(double **A, double *y, int N){
             printf("ERROR| Zero on the diagonal of the matrix during Guassian Elimiation. Considering it as singular, exitting Guass(), and returning a zero vector\n");
             singular = 1;
         }
-        #pragma omp for reduction(+:count)
+        #pragma omp for
         for (j=i+1; j<N+1; j++){
             if (A[j][i]!=0)
             {
@@ -57,12 +52,6 @@ double *Gauss(double **A, double *y, int N){
 /*
     Substitute back in to get x
 */
-#ifdef DEBUG
-    printf("DEBUG REPORT| Converted Values (A and y)\n" );
-    print_matrix(A,N,N);
-    print_vector(y,N);
-    printf("DEBUG REPORT| Reduction count = %d\n", count);
-#endif
     x[N] = y[N]/A[N][N];
     count++;
     for (i=N-1; i>0; i--){
@@ -78,3 +67,4 @@ double *Gauss(double **A, double *y, int N){
 
     return x;
 }
+/* --------------------------------------------------------------------------- */

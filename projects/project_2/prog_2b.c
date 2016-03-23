@@ -16,7 +16,8 @@ int main(void) {
     int N = 8, B = 2;
     int i,j;
     clock_t start, end;
-
+    print_statements();
+    
     double *Y = allocate_zero_vector(N);
     for (i=1; i<N+1; i++){
         Y[i] = i;

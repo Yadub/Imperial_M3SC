@@ -14,6 +14,7 @@ void print_statements(); //contained in the gauss.c file
 void print_vector(double *, int);
 void print_2dvector(double *, int, int);
 void print_matrix(double **, int, int);
+void contour_print(double *, int);
 double *allocate_zero_vector(int);
 double **allocate_matrix(int,int);
 int maxvalpos_vec(double *, int);
@@ -24,19 +25,9 @@ double *BGauss(double **, double *, int, int);
 
 int main(void) {
     /* Yadu Bhageria, 00733164, M3SC */
-    int i,i1,i2,N,gauss;
-/*
-    Values of 2^n
-    2^30 = 1073741824
-    2^29 = 536870912
-    2^28 = 268435456
-    2^27 = 134217728
-    2^26 = 67108864
-    2^25 = 33554432
-    2^24 = 16777216
-    2^23 = 8388608
-    2^20 = 1048576
-*/
+    int i,N,gauss;
+    print_statements();
+
     printf("Enter 0 for Gauss and anything else for BGauss: ");
     scanf("%d",&gauss);
 
@@ -44,8 +35,8 @@ int main(void) {
     printf("           N|    maxval, maxval pos x, maxval pos y,    cpu time,   wall time,       speed|    maxval, maxval pos x, maxval pos y,    cpu time,   wall time,       speed|");
     double n_val[] = {8,12,16,20,24,32,40,48,64,80,96};
 
-    for (i=1; i<=15; i++){
-        N = pow(2,i);
+    for (i=0; i<11; i++){
+        N = n_val[i];
         if (gauss == 0){
             printf("\n%12d|", N);
             solve_2d_gauss(N,false);
@@ -58,7 +49,7 @@ int main(void) {
     }
 
     for (i=1; i<=15; i++){
-        N = pow(2,i);
+        N = 96+32*i;
         if (gauss == 0){
             printf("\n%12d|", N);
             solve_2d_gauss(N,false);
@@ -69,6 +60,7 @@ int main(void) {
             solve_2d_bgauss(N,true);
         }
     }
+    //solve_2d_bgauss(512,true);
 }
 /* --------------------------------------------------------------------------- */
 void solve_2d_bgauss(int N, bool smooth){
@@ -79,10 +71,8 @@ void solve_2d_bgauss(int N, bool smooth){
 
     double delta = 1.0/((double)N);
 
-    double *F = make_Yvec2D(N-1,smooth,delta*delta);
-
+    double *F = make_Yvec2D(N,smooth,delta*delta);
     double **A_banded = allocate_matrix(grid_size,2*B+1);
-
     for (i=1; i<N; i++){
         for (j=1; j<N; j++){
             A_banded[(N-1)*(i-1)+j][B+1] = -4.0;
@@ -112,12 +102,13 @@ void solve_2d_bgauss(int N, bool smooth){
     int maxval_position = maxvalpos_vec(v, grid_size);
     int y_maxval = maxval_position % (N-1);
     int x_maxval = (maxval_position-y_maxval)/(N-1) + 1;
-    //print_2dvector(v,N-1,N-1);
+
+    //contour_print(v,N);
 
     double speed = 1e-9 * v[0] / wt_timetaken;
-    printf("%10.6f, %12.10f, %12.10f, %11.8f, %11.8f, %11.8f|", v[maxval_position]*delta, (double)x_maxval/N, (double)y_maxval/N, time_taken, wt_timetaken, speed);
+    printf("%10.6f, %12.10f, %12.10f, %11.8f, %11.8f, %11.8f|", v[maxval_position], (double)x_maxval/N, (double)y_maxval/N, time_taken, wt_timetaken, speed);
+    free(v);
 }
-
 /* --------------------------------------------------------------------------- */
 void solve_2d_gauss(int N, bool smooth){
     /* Yadu Bhageria, 00733164, M3SC */
@@ -126,7 +117,7 @@ void solve_2d_gauss(int N, bool smooth){
     struct timeval wt_start, wt_end;
 
     double delta = 1.0/((double)N);
-    double *F = make_Yvec2D(N-1,smooth,delta*delta);
+    double *F = make_Yvec2D(N,smooth,delta*delta);
     double **A = allocate_matrix(grid_size,grid_size);
     for (i=1; i<N; i++){
         for (j=1; j<N; j++){
@@ -155,15 +146,18 @@ void solve_2d_gauss(int N, bool smooth){
     double * v = Gauss(A,F,grid_size);
     gettimeofday(&wt_end,NULL);
     end = clock();
-    double time_taken = ((double)end-start)/CLOCKS_PER_SEC;
-    double wt_timetaken = (double)(wt_end.tv_sec - wt_start.tv_sec + (wt_end.tv_usec - wt_start.tv_usec)/1000000.0);
     free_matrix(A, grid_size);
     free(F);
+
+    double time_taken = ((double)end-start)/CLOCKS_PER_SEC;
+    double wt_timetaken = (double)(wt_end.tv_sec - wt_start.tv_sec + (wt_end.tv_usec - wt_start.tv_usec)/1000000.0);
 
     int maxval_position = maxvalpos_vec(v, grid_size);
     int y_maxval = maxval_position % (N-1);
     int x_maxval = (maxval_position-y_maxval)/(N-1) + 1;
-    //print_2dvector(v,N-1,N-1);
+
     double speed = 1e-9 * v[0] / wt_timetaken;
-    printf("%10.6f, %12.10f, %12.10f, %11.8f, %11.8f, %11.8f|", v[maxval_position]*delta, (double)x_maxval/N, (double)y_maxval/N, time_taken, wt_timetaken, speed);
+    printf("%10.6f, %12.10f, %12.10f, %11.8f, %11.8f, %11.8f|", v[maxval_position], (double)x_maxval/N, (double)y_maxval/N, time_taken, wt_timetaken, speed);
+    free(v);
 }
+/* --------------------------------------------------------------------------- */
