@@ -13,16 +13,18 @@ double *SFactors(int);
 double *SFactors(int N){
     /* Yadu Bhageria, 00733164, M3SC */
     double numerator = 1., denominator = 1.;
-    double *factors = allocate_vector(N/2);
+    double *S = allocate_vector(N/2);
+
+    S[0] = 1.0;
 
     for (int i=1; i<=N/2; i++){
         if (numerator/denominator > 1./2.){
             numerator = 1.;
             denominator *= 2.;
         }
-        factors[i] = sin(M_PI*numerator/denominator);
+        S[i] = sin(M_PI*numerator/denominator);
         numerator += 2.;
     }
-    return factors;
+    return S;
 }
 /* --------------------------------------------------------------------------- */

@@ -2,7 +2,11 @@
 #include <stdlib.h>
 #include <math.h>
 #include <stdbool.h>
-
+#include <float.h>
+/*incase Pi is not defined */
+#ifndef M_PI
+#    define M_PI acos(-1.);
+#endif
 /* --------------------------------------------------------------------------- */
 void print_statements(){
     /* Bhageria, Yadu, 00733164, M3SC */
@@ -22,7 +26,7 @@ void print_matrix(double **A, int N, int M){
 */
     for(int i=1; i<N+1; i++){
         for(int j=1; j<M+1; j++){
-            printf("%3.1g ", A[i][j]);
+            printf("%6.3g ", A[i][j]);
         }
         printf("\n");
     }
@@ -48,7 +52,7 @@ void print_2dvector(double *x, int N, int M){
     printf("\n");
 }
 /* --------------------------------------------------------------------------- */
-double **allocate_matrix(int N, int M){
+double **allocate_zero_matrix(int N, int M){
     /* Yadu Bhageria, 00733164, M3SC */
 
     //The safe approach; better sizes over 2^27 in size
@@ -105,50 +109,6 @@ void multiply_vec(double *X, int N, double factor){
     for (i=1; i<N+1; i++){
         X[i] *= factor;
     }
-}
-/* --------------------------------------------------------------------------- */
-double *make_Yvec1D(int N, bool smooth, double delta2){
-    /* Yadu Bhageria, 00733164, M3SC */
-    double *Y = allocate_zero_vector(N-1);
-    for (int i=1; i<N; i++){
-        if ( (double)i/N == 0.5 || (double)i/N == 0.25){
-            if (smooth == true){
-                Y[i] = -40.0;
-            } else{
-            Y[i] = -80.0;
-            }
-        } else if ((double)i/N <= 0.5 && (double)i/N >= 0.25){
-            Y[i] = -80.0;
-        } else{Y[i] = 0.0;}
-        Y[i] *= delta2;
-    }
-    return Y;
-}
-/* --------------------------------------------------------------------------- */
-double **make_AGauss1D(int N){
-    /* Yadu Bhageria, 00733164, M3SC */
-    double **A = allocate_matrix(N-1,N-1);
-    for (int i=1; i<=N-1; i++){
-        A[i][i] = -2.0;
-        if (i>1){
-            A[i][i-1] = 1.0;
-        }
-        if (i<N-1){
-            A[i][i+1] = 1.0;
-        }
-    }
-    return A;
-}
-/* --------------------------------------------------------------------------- */
-double **make_ABGauss1D(int N, int B){
-    /* Yadu Bhageria, 00733164, M3SC */
-    double **A = allocate_matrix(N-1,2*B+1);
-
-    for (int i=1; i<=N-1; i++){
-        A[i][B+1] = -2.0;
-        A[i][B+2] = A[i][B] = 1.0;
-    }
-    return A;
 }
 /* --------------------------------------------------------------------------- */
 double *make_Yvec2D(int N, bool smooth, double delta){
@@ -214,5 +174,108 @@ double *allocate_vector(int N){
     /* Yadu Bhageria, 00733164, M3SC */
     double *X;
     X = (double *) malloc((N+1)*sizeof(double));
+    return X;
+}
+/* --------------------------------------------------------------------------- */
+double **allocate_matrix(int N, int M){
+    /* Yadu Bhageria, 00733164, M3SC */
+
+    //The safe approach; better sizes over 2^27 in size
+    double ** A;
+    A=(double **) malloc((N+1)*sizeof(double *));
+    for(int i=1; i<N+1; i++){
+        A[i]=(double *) malloc((M+1)*sizeof(double));
+    }
+    return A;
+/*
+    //The cautious approach:
+    double **A; int i;
+    A = (double **)malloc((N+1)*sizeof(double *));
+    A[0] = (double *)malloc((N*M+1)*sizeof(double));
+    A[1] = A[0];
+    for (i=2; i<=N; i++) A[i] = A[i-1]+M;
+    return A;
+*/
+}
+/* --------------------------------------------------------------------------- */
+double **Sn_matrix(int N){
+    /* Yadu Bhageria, 00733164, M3SC */
+    int i,j;
+    double **A = allocate_matrix(N-1,N-1);
+    for (i=1; i<N; i++){
+        for (j=1; j<N; j++){
+            A[i][j] = sin(M_PI*i*j/N);
+        }
+    }
+    return A;
+}
+/* --------------------------------------------------------------------------- */
+double **Tn_matrix(int N){
+    /* Yadu Bhageria, 00733164, M3SC */
+    int i,j;
+    double **A = allocate_matrix(N,N);
+    for (i=1; i<=N; i++){
+        for (j=1; j<=N; j++){
+            A[i][j] = sin((2.*i-1.)*j*M_PI/(2.*N));
+        }
+    }
+    return A;
+}
+/* --------------------------------------------------------------------------- */
+double **Tnt_matrix(int N){
+    /* Yadu Bhageria, 00733164, M3SC */
+    int i,j;
+    double **A = allocate_matrix(N,N);
+    for (i=1; i<=N; i++){
+        for (j=1; j<=N; j++){
+            A[j][i] = sin((2.*i-1.)*j*M_PI/(2.*N));
+        }
+    }
+    return A;
+}
+/* --------------------------------------------------------------------------- */
+double **Un_matrix(int N){
+    /* Yadu Bhageria, 00733164, M3SC */
+    int i,j;
+    double **A = allocate_matrix(N,N);
+    for (i=1; i<=N; i++){
+        for (j=1; j<=N; j++){
+            A[i][j] = sin((2.*i-1.)*(2.*j-1.)*M_PI/(4.*N));
+        }
+    }
+    return A;
+}
+/* --------------------------------------------------------------------------- */
+double ** multiply_square_matrices(double **A, double **B, int N){
+    /* Yadu Bhageria, 00733164, M3SC */
+    double **X = allocate_zero_matrix(N,N);
+
+    for (int i=1; i<=N; i++){
+        for (int j=1; j<=N; j++){
+            for (int k=1; k<=N; k++){
+                X[i][j] += A[i][k]*B[k][j];
+            }
+            /* For neater printing */
+            if (fabs(X[i][j]) < 100.*DBL_EPSILON){
+                X[i][j] = 0.;
+            }
+        }
+    }
+    return X;
+}
+/* --------------------------------------------------------------------------- */
+double * multiply_matrix_vector(double **A, double *B, int N){
+    /* Yadu Bhageria, 00733164, M3SC */
+    double *X = allocate_zero_vector(N);
+
+    for (int i=1; i<=N; i++){
+        for (int k=1; k<=N; k++){
+            X[i] += A[i][k]*B[k];
+        }
+        /* For neater printing */
+        if (fabs(X[i]) < 100.*DBL_EPSILON){
+            X[i] = 0.;
+        }
+    }
     return X;
 }
