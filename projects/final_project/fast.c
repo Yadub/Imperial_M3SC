@@ -118,7 +118,7 @@ int FastUN(double *x, double *y, double *w, double *S,int N, int skip){
             w[skip*2*i] = y[(N+1-2*i)*skip] - y[(N-2*i)*skip];
         }
         w[skip*N] = y[skip];
-        int e2 = FastTN(w-skip,w,w-skip,S,N/2,2*skip);
+        int e2 = FastTN(w-skip,w,x-skip,S,N/2,2*skip);
         for (i=1; i<=N/2; i++){
             //Use vector S here insteal!
             x[i*skip] = sin((2*i-1)*M_PI/(4*N))*pow(-1,i+1)*w[(2*i-1)*skip];
@@ -129,7 +129,7 @@ int FastUN(double *x, double *y, double *w, double *S,int N, int skip){
             w[skip*(2*(i-1)+1)] = y[(2*i)*skip] + y[(2*i+1)*skip];
         }
         w[skip*(N-1)] = y[N*skip];
-        int e1 = FastTN(w,w-skip,w,S,N/2,2*skip);
+        int e1 = FastTN(w,w-skip,y,S,N/2,2*skip);
         for (i=1; i<=N/2; i++){
             //Use vector S here insteal!
             x[i*skip] += sin((2*N+1-2*i)*M_PI/(4*N))*w[(2*i)*skip];

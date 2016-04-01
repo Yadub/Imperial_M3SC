@@ -279,3 +279,14 @@ double * multiply_matrix_vector(double **A, double *B, int N){
     }
     return X;
 }
+double * add_vectors(double *X, double *Y, double factor, int N){
+    /* Yadu Bhageria, 00733164, M3SC */
+    double *Z = allocate_vector(N);
+    for (int i=1; i<=N; i++){
+        Z[i] = X[i] + factor*Y[i];
+        if (fabs(Z[i])<1e-10){
+            Z[i] = 0;
+        }
+    }
+    return Z;
+}

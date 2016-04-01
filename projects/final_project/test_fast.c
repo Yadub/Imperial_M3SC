@@ -11,6 +11,7 @@ double **Un_matrix(int);
 double **Tn_matrix(int);
 double **Tnt_matrix(int);
 double * multiply_matrix_vector(double **, double *, int);
+double * add_vectors(double *, double *, double, int);
 void print_matrix(double **, int, int);
 void print_vector(double *, int);
 int FastSN(double *, double *, double *, double *,int, int);
@@ -47,12 +48,14 @@ int main(void){
                 int returnval = FastSN(x,y,w,S,N,1);
                 printf("Returned Value: %d\n", returnval);
                 print_vector(x,N-1);
+                print_vector(add_vectors(x,multiply_matrix_vector(Sn,y,N-1),-1.,N-1),N-1);
                 break;
             }
             case 2:{
                 printf("Testing Tn\n");
                 double **Tn = Tn_matrix(N);
-                print_vector(multiply_matrix_vector(Tn,y,N),N);
+                double *A = multiply_matrix_vector(Tn,y,N);
+                print_vector(A,N);
 
                 double *S = SFactors(N);
                 double *x = allocate_zero_vector(N);
@@ -60,12 +63,14 @@ int main(void){
                 int returnval = FastTN(x,y,w,S,N,1);
                 printf("Returned Value: %d\n", returnval);
                 print_vector(x,N);
+                print_vector(add_vectors(x,A,-1.,N),N);
                 break;
             }
             case 3:{
                 printf("Testing Un\n");
                 double **Un = Un_matrix(N);
-                print_vector(multiply_matrix_vector(Un,y,N),N);
+                double *A = multiply_matrix_vector(Un,y,N);
+                print_vector(A,N);
 
                 double *S = SFactors(N);
                 double *x = allocate_zero_vector(N);
@@ -73,6 +78,7 @@ int main(void){
                 int returnval = FastUN(x,y,w,S,N,1);
                 printf("Returned Value: %d\n", returnval);
                 print_vector(x,N);
+                print_vector(add_vectors(x,A,-1.,N),N);
                 break;
             }
         }
