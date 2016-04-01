@@ -36,7 +36,7 @@ void print_matrix(double **A, int N, int M){
 void print_vector(double *x, int N){
     /* Yadu Bhageria, 00733164, M3SC */
     for (int i=1; i<N+1; i++){
-        printf("%3d | %12.4g\n",i, x[i]);
+        printf("%3d | %12.6g\n",i, x[i]);
     }
     printf("\n");
 }
