@@ -12,7 +12,7 @@ void print_statements(){
     /* Bhageria, Yadu, 00733164, M3SC */
     printf(  "         Name: Bhageria, Yadu");
     printf("\n          CID: 00733164");
-	printf("\n  Course Code: 00733164, M3SC");
+	printf("\n  Course Code: M3SC");
     printf("\nEmail Address: yrb13@ic.ac.uk");
     printf("\n         Time: %s ",__TIME__);
     printf("\n         Date: %s ",__DATE__);
@@ -273,12 +273,13 @@ double * multiply_matrix_vector(double **A, double *B, int N){
             X[i] += A[i][k]*B[k];
         }
         /* For neater printing */
-        if (fabs(X[i]) < 100.*DBL_EPSILON){
+        /*if (fabs(X[i]) < 100.*DBL_EPSILON){
             X[i] = 0.;
-        }
+        }*/
     }
     return X;
 }
+/* --------------------------------------------------------------------------- */
 double * add_vectors(double *X, double *Y, double factor, int N){
     /* Yadu Bhageria, 00733164, M3SC */
     double *Z = allocate_vector(N);

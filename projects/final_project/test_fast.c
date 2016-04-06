@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 /* -Functions-needed-from-other-files----------------------------------------- */
+void print_statements();
 void print_vector(double *, int);
 double *SFactors(int);
 double *allocate_zero_vector(int);
@@ -19,7 +20,10 @@ int FastTN(double *, double *, double *, double *,int, int);
 int FastUN(double *, double *, double *, double *,int, int);
 /* --------------------------------------------------------------------------- */
 int main(void){
+    /* Yadu Bhageria, 00733164, M3SC */
     int N,STU;
+
+    print_statements();
 
     printf("Enter 1,2,3 for Sn,Tn,Un: ");
     scanf("%d", &STU);

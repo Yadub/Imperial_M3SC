@@ -2,24 +2,23 @@
 #include <stdlib.h>
 #include <math.h>
 /* -Functions-needed-from-other-files----------------------------------------- */
+void print_statements();
 void print_vector(double *, int);
 double *SFactors(int);
 double *allocate_zero_vector(int);
 double *SFactors(int);
 double **Sn_matrix(int);
-double **Un_matrix(int);
-double **Tn_matrix(int);
-double **Tnt_matrix(int);
 void multiply_vec(double *, int, double);
 double * multiply_matrix_vector(double **, double *, int);
-void print_matrix(double **, int, int);
 void print_vector(double *, int);
+void free_matrix(double **, int);
 int FastSN(double *, double *, double *, double *,int, int);
-int FastTN(double *, double *, double *, double *,int, int);
-int FastUN(double *, double *, double *, double *,int, int);
 /* --------------------------------------------------------------------------- */
 int main(void){
+    /* Yadu Bhageria, 00733164, M3SC */
     int N;
+
+    print_statements();
 
     printf("Enter N: ");
     scanf("%d", &N);
@@ -34,9 +33,8 @@ int main(void){
     double **Sn = Sn_matrix(N);
     double *y = multiply_matrix_vector(Sn,xp,N-1);
     multiply_vec(y,N-1,2./N);
-
     print_vector(multiply_matrix_vector(Sn,y,N-1),N-1);
-
+    free_matrix(Sn,N-1);
     double *S = SFactors(N);
     double *x = allocate_zero_vector(N-1);
     double *w = allocate_zero_vector(N-1);
@@ -44,5 +42,8 @@ int main(void){
     printf("Returned Value: %d\n", returnval);
     print_vector(x,N-1);
 
+#ifdef DEBUG
+    printf("S[0]=%g, S[1]=%g, S[2]=%g, S[3]=%g, S[4]=%g, S[5]=%g\n", S[0],S[1],S[2],S[3],S[4],S[5]);
+#endif
 }
 /* --------------------------------------------------------------------------- */

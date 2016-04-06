@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 /* -Functions-needed-from-other-files----------------------------------------- */
+void print_statements();
 void print_vector(double *, int);
 double *SFactors(int);
 double **Sn_matrix(int);
@@ -12,7 +13,10 @@ double ** multiply_square_matrices(double **, double **, int);
 void print_matrix(double **, int, int);
 /* --------------------------------------------------------------------------- */
 int main(void){
+    /* Yadu Bhageria, 00733164, M3SC */
     int N;
+
+    print_statements();
 
     printf("Enter N: ");
     scanf("%d", &N);
