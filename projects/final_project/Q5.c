@@ -48,6 +48,7 @@ int main(void){
             double *w = allocate_zero_vector(grid_size);
 
             start = clock();
+
             for (j=0; j<N-1; j++){
                 rv = FastSN(phi+j*(N-1),rho+j*(N-1),w+j*(N-1),S,N,1);
                 returnval = (rv==-1 || returnval==-1) ? -1 : 0;
@@ -60,7 +61,7 @@ int main(void){
             //printf("Y transforms done\n");
             for (j=1; j<N; j++){
                 for (k=1; k<N; k++){
-                    phi[(N-1)*(j-1)+k] = 4.*phi[(N-1)*(j-1)+k];
+                    phi[(N-1)*(j-1)+k] = 4.*phi[(N-1)*(j-1)+k]/N/N;
                     phi[(N-1)*(j-1)+k] = phi[(N-1)*(j-1)+k]/(M_PI*M_PI*(k*k+j*j));
                 }
             }
@@ -70,15 +71,17 @@ int main(void){
                 returnval = (rv==-1 || returnval==-1) ? -1 : 0;
             }
             //printf("PhiX transforms done\n");
-            /*for (j=0; j<N-1; j++){
+            for (j=0; j<N-1; j++){
                 rv = FastSN(rho-j,phi-j,w-j,S,N,N-1);
                 returnval = (rv==-1 || returnval==-1) ? -1 : 0;
             }
-            //printf("PhiY transforms done\n");*/
+            //printf("PhiY transforms done\n");
+
+            end = clock();
+
             int maxvalpos = maxvalpos_vec(rho,grid_size);
             int maxval_ypos = maxvalpos % (N-1);
             int maxval_xpos = 1 + (maxvalpos-maxval_ypos)/(N-1);
-            end = clock();
             timetaken = ((double)end-start)/CLOCKS_PER_SEC;
 
             //printf("%d, %d, %d, %f\n\n", maxvalpos, maxval_xpos, maxval_ypos,rho[maxvalpos]);

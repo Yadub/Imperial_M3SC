@@ -63,7 +63,8 @@ double *SFactors(int N){
 /* --------------------------------------------------------------------------- */
 int FastSN(double *x, double *y, double *w, double *S,int N, int skip){
     /* Yadu Bhageria, 00733164, M3SC */
-    int returnval = 0, use_omp = 0;
+    int returnval = 0;
+    //int use_omp = 0;
 /*
     Check the input is valid
 */
@@ -97,29 +98,14 @@ int FastSN(double *x, double *y, double *w, double *S,int N, int skip){
         int e2 = FastTN(x-skip,y,w,S,N/2,2*skip);
         returnval = (e1==0 && e2==0)? 0 : -1;
 */
-        #pragma omp parallel if(use_omp==1)
-        {   use_omp = 0;
-            #pragma omp sections
-            {
-                #pragma omp section
-                {
-                    w[N*skip] = y[skip*N/2];
-                    for (int i=1; i<N/2; i++){
-                        w[skip*2*i] = y[skip*i] + y[skip*(N-i)];
-                    }
-                    e2 = FastTN(x-skip,w,w-skip,S,N/2,2*skip);
-                }
-                #pragma omp section
-                {
-                    for (int i=1; i<N/2; i++){
-                        w[skip*(2*(i-1)+1)] = y[skip*i] - y[skip*(N-i)];
-                    }
-                    e1 = FastSN(x,w-skip,w,S,N/2,2*skip);
-                }
-            }
-            returnval = (e1==0 && e2==0)? 0 : -1;
+        w[(N-1)*skip] = y[skip*N/2];
+        for (int i=1; i<N/2; i++){
+            w[skip*(2*(i-1)+1)] = y[skip*i] + y[skip*(N-i)];
+            w[skip*2*i] = y[skip*i] - y[skip*(N-i)];
         }
-
+        e1 = FastSN(x,w,y,S,N/2,2*skip);
+        e2 = FastTN(x-skip,w-skip,y-skip,S,N/2,2*skip);
+        returnval = (e1==0 && e2==0)? 0 : -1;
     } else{
         return -1;
     }
