@@ -35,12 +35,13 @@ int main(void){
     multiply_vec(y,N-1,2./N);
     print_vector(multiply_matrix_vector(Sn,y,N-1),N-1);
     free_matrix(Sn,N-1);
-    double *S = SFactors(N);
+    double *S = SFactors(4.*N);
     double *x = allocate_zero_vector(N-1);
     double *w = allocate_zero_vector(N-1);
     int returnval = FastSN(x,y,w,S,N,1);
     printf("Returned Value: %d\n", returnval);
     print_vector(x,N-1);
+
 
 #ifdef DEBUG
     printf("S[0]=%g, S[1]=%g, S[2]=%g, S[3]=%g, S[4]=%g, S[5]=%g\n", S[0],S[1],S[2],S[3],S[4],S[5]);

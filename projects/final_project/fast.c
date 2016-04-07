@@ -33,7 +33,7 @@ double *SFactors(int N){
         S = allocate_vector(N/5);
         S[1] = sin(M_PI*1./5.);
         S[2] = sin(M_PI*2./5.);
-        for (int i=1; i<=N/5; i++){
+        for (int i=1; i<=(-2+N/5); i++){
             if (numerator/denominator >= 1./2.){
                 numerator = 1.;
                 denominator *= 2.;
@@ -181,7 +181,7 @@ int FastUN(double *x, double *y, double *w, double *S,int N, int skip){
         x[2*skip] = sin(M_PI*1./4.)*y[skip] + sin(M_PI*3./4.)*y[2*skip] + sin(M_PI*5./4.)*y[3*skip];
         x[3*skip] = sin(M_PI*5./12.)*y[skip] + sin(M_PI*5./4.)*y[2*skip] + sin(M_PI*25./12.)*y[3*skip];
         */
-        x[skip] = S[3]*y[skip] + S[4]*y[2*skip] + S[5]*y[3*skip];
+        x[skip]   = S[3]*y[skip] + S[4]*y[2*skip] + S[5]*y[3*skip];
         x[2*skip] = S[4]*(y[skip] + y[2*skip] - y[3*skip]);
         x[3*skip] = S[5]*y[skip] - S[4]*y[2*skip] + S[3]*y[3*skip];
     } else if (N==5){
