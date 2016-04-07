@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS= -O3
+CFLAGS= -O3 -fopenmp
 
 all: prog_testing.out prog_fast.out prog_2.out prog_4.out prog_5.out
 
