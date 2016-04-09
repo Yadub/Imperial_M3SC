@@ -9,16 +9,7 @@
 #ifndef M_PI
 #   define M_PI acos(-1.);
 #endif
-/* -Functions-needed-from-other-files----------------------------------------- */
-void print_statements();
-double *allocate_zero_vector(int);
-double *SFactors(int);
-double *make_Yvec2D(int, bool, double);
-int FastSN(double *, double *, double *, double *,int, int);
-int maxvalpos_vec(double *, int);
-/* --------------------------------------------------------------------------- */
-double *cos_vec(int);
-/* --------------------------------------------------------------------------- */
+/* --Data-structure-for-moving-wanted-data-between-functions------------------ */
 typedef struct poisson2d_data {
     double maxval;
     double xpos;
@@ -26,35 +17,37 @@ typedef struct poisson2d_data {
     double cpu_time;
     double wall_time;
 } poisson2d_data;
+/* -Functions-needed-from-other-files----------------------------------------- */
+void print_statements();
+double *allocate_zero_vector(int);
+double *SFactors(int);
+double *make_Yvec2D(int, bool, double);
+int FastSN(double *, double *, double *, double *,int, int);
+int maxvalpos_vec(double *, int);
+void contour_print(double *, int);
+/* -Functions-implemented-in-current-file------------------------------------- */
+double *cos_vec(int);
 poisson2d_data sn_poisson2d(int, bool);
 /* --------------------------------------------------------------------------- */
 int main(void){
     /* Yadu Bhageria, 00733164, M3SC */
-    int N1, i;
-
+    int N, i, j;
+    poisson2d_data Phi_FD, Phi_a;
     print_statements();
+    printf("Pow of 2|      N     | FD  Maxval |    x pos   |    y pos   |  A Maxval  |    x pos   |    y pos   |  CPU Time  |  Wall Time |\n");
+    printf("--------|------------|------------|------------|------------|------------|------------|------------|------------|------------|\n");
+    int N1[] = {5,6,8};
 
-    printf("Choose N (2, 3 or 5): ");
-    scanf("%d", &N1);
-    printf("\n");
-
-    if (N1==2 || N1==3 || N1==5){
-        poisson2d_data Phi_FD, Phi_a;
-        printf(" i |      N     | FD  Maxval |    x pos   |    y pos   |  A Maxval  |    x pos   |    y pos   |  CPU Time  |  Wall Time |\n");
-        printf("---|------------|------------|------------|------------|------------|------------|------------|------------|------------|\n");
-
-        for (i=3; i<=14; i++){
-            int N = (int) N1*pow(2,i);
-
+    for (i=0; i<=15; i++){
+        for (j=0; j<3; j++){
+            N = (int) N1[j]*pow(2,i);
             Phi_a = sn_poisson2d(N, true);
             Phi_FD = sn_poisson2d(N, false);
 
-            printf("%3d|%12d|", i+1, N);
+            printf(" %1d*2^%2d |%11d |",N1[j]/(int)pow(2,j), i+j, N);
             printf(" %10.6f | %10.6f | %10.6f |", Phi_FD.maxval, Phi_FD.xpos, Phi_FD.ypos);
             printf(" %10.6f | %10.6f | %10.6f | %10.6f | %10.6f |\n", Phi_a.maxval, Phi_a.xpos, Phi_a.ypos, Phi_a.cpu_time, Phi_a.wall_time);
         }
-    } else {
-        printf("Please enter a valid value for N\n");
     }
 }
 /* --------------------------------------------------------------------------- */
@@ -73,7 +66,8 @@ poisson2d_data sn_poisson2d(int N, bool analytic){
     clock_t start, end;
     struct timeval walltime_s, walltime_e;
     poisson2d_data data;
-    //Initialize Variables and Memory
+
+    //Initialize Variables and Memory for Data
     double delta = 1./N;
     int grid_size = (N-1)*(N-1);
     double *S = SFactors(4*N);
@@ -144,8 +138,17 @@ poisson2d_data sn_poisson2d(int N, bool analytic){
     data.cpu_time = ((double)end-start)/CLOCKS_PER_SEC;
     data.wall_time = (double)(walltime_e.tv_sec - walltime_s.tv_sec + (walltime_e.tv_usec - walltime_s.tv_usec)/1000000.0);
 
+    /*
+    // To print out the contour plot as well
+    if (N>=64) contour_print(x,N);
+    */
+
     //Free Memory
     free(x);free(y);free(w);free(S);
+
+#ifdef DEBUG
+    printf("DEBUG REPORT| RV = %d\n", returnval);
+#endif
 
     return data;
 }
