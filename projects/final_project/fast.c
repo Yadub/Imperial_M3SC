@@ -64,40 +64,29 @@ double *SFactors(int N){
 int FastSN(double *x, double *y, double *w, double *S,int N, int skip){
     /* Yadu Bhageria, 00733164, M3SC */
     int returnval = 0;
-    //int use_omp = 0;
 /*
     Check the input is valid
 */
     if (N<=1){
-        return -1;
+        returnval = -1;
     } else if (N==2){
         x[skip] = y[skip];
     } else if (N==3){
-        x[skip] = S[1] * (y[skip] + y[2*skip]);
+        x[  skip] = S[1] * (y[skip] + y[2*skip]);
         x[2*skip] = S[1] * (y[skip] - y[2*skip]);
     } else if (N==5){
-        x[skip] = S[1]*y[skip] + S[2]*y[2*skip] + S[2]*y[3*skip] + S[1]*y[4*skip];
-        x[2*skip] = S[2]*y[skip] + S[1]*y[2*skip] - S[1]*y[3*skip] - S[2]*y[4*skip];
-        x[3*skip] = S[2]*y[skip] - S[1]*y[2*skip] - S[1]*y[3*skip] + S[2]*y[4*skip];
-        x[4*skip] = S[1]*y[skip] - S[2]*y[2*skip] + S[2]*y[3*skip] - S[1]*y[4*skip];
+        double t1, t2;
+        t1 = S[1]*y[  skip] + S[2]*y[3*skip];
+        t2 = S[2]*y[2*skip] + S[1]*y[4*skip];
+        x[  skip] = t1 + t2;
+        x[4*skip] = t1 - t2;
+        t1 = S[2]*y[  skip] - S[1]*y[3*skip];
+        t2 = S[1]*y[2*skip] - S[2]*y[4*skip];
+        x[2*skip] = t1 + t2;
+        x[3*skip] = t1 - t2;
+
     } else if (N % 2 == 0){
         int e1, e2;
-/*
-    //A cautious but slower approach
-        w[N*skip] = y[skip*N/2];
-        for (int i=1; i<N/2; i++){
-            w[skip*2*i] = y[skip*i] + y[skip*(N-i)];
-            w[skip*(2*(i-1)+1)] = y[skip*i] - y[skip*(N-i)];
-        }
-        y[N*skip] = w[N*skip];
-        for (int i=1; i<N/2; i++){
-            y[skip*2*i] = w[skip*2*i];
-            y[skip*(2*(i-1)+1)] = w[skip*(2*(i-1)+1)];
-        }
-        int e1 = FastSN(x,y-skip,w-skip,S,N/2,2*skip);
-        int e2 = FastTN(x-skip,y,w,S,N/2,2*skip);
-        returnval = (e1==0 && e2==0)? 0 : -1;
-*/
         w[(N-1)*skip] = y[skip*N/2];
         for (int i=1; i<N/2; i++){
             w[skip*(2*(i-1)+1)] = y[skip*i] + y[skip*(N-i)];
@@ -107,7 +96,7 @@ int FastSN(double *x, double *y, double *w, double *S,int N, int skip){
         e2 = FastTN(x-skip,w-skip,y-skip,S,N/2,2*skip);
         returnval = (e1==0 && e2==0)? 0 : -1;
     } else{
-        return -1;
+        returnval = -1;
     }
     return returnval;
 
@@ -122,23 +111,31 @@ int FastTN(double *x, double *y, double *w, double *S,int N, int skip){
     /*
         Check the input is valid
     */
-    if (N==0){
-        return -1;
+    if (N<=0){
+        returnval = -1;
     } else if (N==1){
         x[skip] = y[skip];
     } else if (N==2){
-        x[skip] = S[1]*y[skip] + y[2*skip];
-        x[2*skip] = S[1]*y[skip] - y[2*skip];
+        double t1 = S[1]*y[skip];
+        x[skip]   = t1 + y[2*skip];
+        x[2*skip] = t1 - y[2*skip];
     } else if (N==3){
-        x[skip] = S[2]*y[skip] + S[1]*y[2*skip] + y[3*skip];
+        double t1 = S[2]*y[skip] + y[3*skip];
+        double t2 = S[1]*y[2*skip];
+        x[skip]   = t1 + t2;
         x[2*skip] = y[skip] - y[3*skip];
-        x[3*skip] = S[2]*y[skip] - S[1]*y[2*skip] + y[3*skip];
+        x[3*skip] = t1 - t2;
     } else if (N==5){
-        x[skip]   = S[3]*y[skip] + S[1]*y[2*skip] + S[4]*y[3*skip] + S[2]*y[4*skip] + y[5*skip];
-        x[2*skip] = S[4]*y[skip] + S[2]*y[2*skip] + S[3]*y[3*skip] - S[1]*y[4*skip] - y[5*skip];
+        double t1, t2;
+        t1 = S[3]*y[  skip] + S[4]*y[3*skip];
+        t2 = S[1]*y[2*skip] + S[2]*y[4*skip];
+        x[  skip] = t1 + t2 + y[5*skip];
+        x[5*skip] = t1 - t2 + y[5*skip];
+        t1 = S[4]*y[  skip] + S[3]*y[3*skip];
+        t2 = S[2]*y[2*skip] - S[1]*y[4*skip];
+        x[2*skip] = t1 + t2 - y[5*skip];
+        x[4*skip] = t1 - t2 - y[5*skip];
         x[3*skip] =      y[skip]                  -      y[3*skip]                  + y[5*skip];
-        x[4*skip] = S[4]*y[skip] - S[2]*y[2*skip] + S[3]*y[3*skip] + S[1]*y[4*skip] - y[5*skip];
-        x[5*skip] = S[3]*y[skip] - S[1]*y[2*skip] + S[4]*y[3*skip] - S[2]*y[4*skip] + y[5*skip];
     } else if (N % 2 == 0){
         int e1 = FastTN(w,y,x,S,N/2,2*skip);
         int e2 = FastUN(w-skip,y-skip,x-skip,S,N/2,2*skip);
@@ -148,7 +145,7 @@ int FastTN(double *x, double *y, double *w, double *S,int N, int skip){
         }
         returnval = (e1==0 && e2==0)? 0 : -1;
     } else{
-        return -1;
+        returnval = -1;
     }
     return returnval;
 }
@@ -162,70 +159,63 @@ int FastUN(double *x, double *y, double *w, double *S,int N, int skip){
 /*
     Check the input is valid
 */
-    if (N==0){
-        return -1;
+    if (N<=0){
+        returnval = -1;
     } else if (N==1){
         x[skip] = sin(M_PI*1./4.)*y[skip];
     } else if (N==2){
-        /*
-        // The exact definition of the factors wanted.
-        x[skip] = sin(M_PI*1./8.)*y[skip] + sin(M_PI*3./8.)*y[2*skip];
-        x[2*skip] = sin(M_PI*3./8.)*y[skip] - sin(M_PI*1./8.)*y[2*skip];
-        */
-        x[skip] = S[2]*y[skip] + S[3]*y[2*skip];
+        x[  skip] = S[2]*y[skip] + S[3]*y[2*skip];
         x[2*skip] = S[3]*y[skip] - S[2]*y[2*skip];
     } else if (N==3){
-        /*
-        // The exact definitions of the factors wanted.
-        x[skip] = sin(M_PI*1./12.)*y[skip] + sin(M_PI*1./4.)*y[2*skip] + sin(M_PI*5./12.)*y[3*skip];
-        x[2*skip] = sin(M_PI*1./4.)*y[skip] + sin(M_PI*3./4.)*y[2*skip] + sin(M_PI*5./4.)*y[3*skip];
-        x[3*skip] = sin(M_PI*5./12.)*y[skip] + sin(M_PI*5./4.)*y[2*skip] + sin(M_PI*25./12.)*y[3*skip];
-        */
-        x[skip]   = S[3]*y[skip] + S[4]*y[2*skip] + S[5]*y[3*skip];
+        double t1 = S[4]*y[2*skip];
+        x[  skip] = S[3]*y[skip] + S[5]*y[3*skip] + t1;
         x[2*skip] = S[4]*(y[skip] + y[2*skip] - y[3*skip]);
-        x[3*skip] = S[5]*y[skip] - S[4]*y[2*skip] + S[3]*y[3*skip];
+        x[3*skip] = S[5]*y[skip] + S[3]*y[3*skip] - t1;
     } else if (N==5){
-        x[skip]   = S[5]*y[skip] + S[6]*y[2*skip] + S[7]*y[3*skip] + S[8]*y[4*skip] + S[9]*y[5*skip];
-        x[2*skip] = S[6]*y[skip] + S[9]*y[2*skip] + S[7]*y[3*skip] - S[5]*y[4*skip] - S[8]*y[5*skip];
-        x[3*skip] = S[7]*y[skip] + S[7]*y[2*skip] - S[7]*y[3*skip] - S[7]*y[4*skip] + S[7]*y[5*skip];
-        x[4*skip] = S[8]*y[skip] - S[5]*y[2*skip] - S[7]*y[3*skip] + S[9]*y[4*skip] - S[6]*y[5*skip];
-        x[5*skip] = S[9]*y[skip] - S[8]*y[2*skip] + S[7]*y[3*skip] - S[6]*y[4*skip] + S[5]*y[5*skip];
+        double t1 = S[7]*y[3*skip];
+        x[skip]   = S[5]*y[skip] + S[6]*y[2*skip] + t1 + S[8]*y[4*skip] + S[9]*y[5*skip];
+        x[2*skip] = S[6]*y[skip] + S[9]*y[2*skip] + t1 - S[5]*y[4*skip] - S[8]*y[5*skip];
+        x[3*skip] = S[7]*y[skip] + S[7]*y[2*skip] - t1 - S[7]*y[4*skip] + S[7]*y[5*skip];
+        x[4*skip] = S[8]*y[skip] - S[5]*y[2*skip] - t1 + S[9]*y[4*skip] - S[6]*y[5*skip];
+        x[5*skip] = S[9]*y[skip] - S[8]*y[2*skip] + t1 - S[6]*y[4*skip] + S[5]*y[5*skip];
     } else if (N % 2 == 0){
         int i;
-        /* Find values of vector a */
+
+        // /* Find values of vector a */
+        // for (i=1; i<N/2; i++){
+        //     w[skip*2*i] = y[(N+1-2*i)*skip] - y[(N-2*i)*skip];
+        // }
+        // w[skip*N] = y[skip];
+        // int e2 = FastTN(w-skip,w,x-skip,S,N/2,2*skip);
+        // for (i=1; i<=N/2; i++){
+        //     x[i*skip] = S[N+i-1]*pow(-1,i+1)*w[(2*i-1)*skip];
+        //     x[(N+1-i)*skip] = S[2*N-i]*pow(-1,i+1)*w[(2*i-1)*skip];
+        // }
+        // /* Find values of vector b */
+        // for (i=1; i<N/2; i++){
+        //     w[skip*(2*(i-1)+1)] = y[(2*i)*skip] + y[(2*i+1)*skip];
+        // }
+        // w[skip*(N-1)] = y[N*skip];
+        // int e1 = FastTN(w,w-skip,y,S,N/2,2*skip);
+        // for (i=1; i<=N/2; i++){
+        //     x[i*skip] += S[2*N-i]*w[(2*i)*skip];
+        //     x[(N+1-i)*skip] -= S[N+i-1]*w[(2*i)*skip];
+        // }
         for (i=1; i<N/2; i++){
             w[skip*2*i] = y[(N+1-2*i)*skip] - y[(N-2*i)*skip];
-        }
-        w[skip*N] = y[skip];
-        int e2 = FastTN(w-skip,w,x-skip,S,N/2,2*skip);
-        for (i=1; i<=N/2; i++){
-            x[i*skip] = S[N+i-1]*pow(-1,i+1)*w[(2*i-1)*skip];
-            x[(N+1-i)*skip] = S[2*N-i]*pow(-1,i+1)*w[(2*i-1)*skip];
-/*
-            //The exact values
-            x[i*skip] = sin((2*i-1)*M_PI/(4*N))*pow(-1,i+1)*w[(2*i-1)*skip];
-            x[(N+1-i)*skip] = sin((2*N+1-2*i)*M_PI/(4*N))*pow(-1,i+1)*w[(2*i-1)*skip];
-*/
-        }
-        /* Find values of vector b */
-        for (i=1; i<N/2; i++){
             w[skip*(2*(i-1)+1)] = y[(2*i)*skip] + y[(2*i+1)*skip];
         }
+        w[skip*N] = y[skip];
         w[skip*(N-1)] = y[N*skip];
-        int e1 = FastTN(w,w-skip,y,S,N/2,2*skip);
+        int e2 = FastTN(y-skip,w,x-skip,S,N/2,2*skip);
+        int e1 = FastTN(y,w-skip,x,S,N/2,2*skip);
         for (i=1; i<=N/2; i++){
-
-            x[i*skip] += S[N+N-i]*w[(2*i)*skip];
-            x[(N+1-i)*skip] -= S[N+i-1]*w[(2*i)*skip];
-/*
-            // The exact values
-            x[i*skip] += sin((2*N+1-2*i)*M_PI/(4*N))*w[(2*i)*skip];
-            x[(N+1-i)*skip] -= sin((2*i-1)*M_PI/(4*N))*w[(2*i)*skip];
-*/
+            x[i*skip] = S[N+i-1]*pow(-1,i+1)*y[(2*i-1)*skip] + S[2*N-i]*y[(2*i)*skip];
+            x[(N+1-i)*skip] = S[2*N-i]*pow(-1,i+1)*y[(2*i-1)*skip] - S[N+i-1]*y[(2*i)*skip];
         }
         returnval = (e1==0 && e2==0)? 0 : -1;
     } else{
-        return -1;
+        returnval = -1;
     }
     return returnval;
 }
