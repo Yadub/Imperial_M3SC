@@ -5,7 +5,7 @@
 #include <float.h>
 /*incase Pi is not defined */
 #ifndef M_PI
-#    define M_PI acos(-1.);
+#    define M_PI acos(-1.)
 #endif
 /* --------------------------------------------------------------------------- */
 void print_statements(){

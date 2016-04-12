@@ -7,7 +7,7 @@
 #include <omp.h>
 /*incase Pi is not defined */
 #ifndef M_PI
-#   define M_PI acos(-1.);
+#   define M_PI acos(-1.)
 #endif
 /* --Data-structure-for-moving-wanted-data-between-functions------------------ */
 typedef struct poisson2d_data {
@@ -74,6 +74,7 @@ poisson2d_data sn_poisson2d(int N, bool analytic){
     double *x = allocate_zero_vector(grid_size);
     double *w = allocate_zero_vector(grid_size);
     double *y = make_Yvec2D(N,true,-1.);
+    double *C = cos_vec(N);
 
     //Start Timing
     start = clock();
@@ -102,7 +103,6 @@ poisson2d_data sn_poisson2d(int N, bool analytic){
             }
         }
     } else {
-        double *C = cos_vec(N);
         double constant = 4. / (N*N);
         #pragma omp for
         for (i=1; i<N; i++){

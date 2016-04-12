@@ -3,7 +3,7 @@
 #include <math.h>
 /*incase Pi is not defined */
 #ifndef M_PI
-#    define M_PI acos(-1.);
+#    define M_PI acos(-1.)
 #endif
 /* -Functions-needed-from-other-files----------------------------------------- */
 double *allocate_vector(int);
