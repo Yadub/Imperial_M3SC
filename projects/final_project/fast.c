@@ -127,15 +127,15 @@ int FastTN(double *x, double *y, double *w, double *S,int N, int skip){
         x[3*skip] = t1 - t2;
     } else if (N==5){
         double t1, t2;
-        t1 = S[3]*y[  skip] + S[4]*y[3*skip];
+        t1 = S[3]*y[  skip] + S[4]*y[3*skip] + y[5*skip];
         t2 = S[1]*y[2*skip] + S[2]*y[4*skip];
-        x[  skip] = t1 + t2 + y[5*skip];
-        x[5*skip] = t1 - t2 + y[5*skip];
-        t1 = S[4]*y[  skip] + S[3]*y[3*skip];
+        x[  skip] = t1 + t2;
+        x[5*skip] = t1 - t2;
+        t1 = S[4]*y[  skip] + S[3]*y[3*skip] - y[5*skip];
         t2 = S[2]*y[2*skip] - S[1]*y[4*skip];
-        x[2*skip] = t1 + t2 - y[5*skip];
-        x[4*skip] = t1 - t2 - y[5*skip];
-        x[3*skip] =      y[skip]                  -      y[3*skip]                  + y[5*skip];
+        x[2*skip] = t1 + t2;
+        x[4*skip] = t1 - t2;
+        x[3*skip] = y[skip] - y[3*skip] + y[5*skip];
     } else if (N % 2 == 0){
         int e1 = FastTN(w,y,x,S,N/2,2*skip);
         int e2 = FastUN(w-skip,y-skip,x-skip,S,N/2,2*skip);
@@ -162,7 +162,7 @@ int FastUN(double *x, double *y, double *w, double *S,int N, int skip){
     if (N<=0){
         returnval = -1;
     } else if (N==1){
-        x[skip] = sin(M_PI*1./4.)*y[skip];
+        x[skip] = S[1]*y[skip];
     } else if (N==2){
         x[  skip] = S[2]*y[skip] + S[3]*y[2*skip];
         x[2*skip] = S[3]*y[skip] - S[2]*y[2*skip];
@@ -175,7 +175,7 @@ int FastUN(double *x, double *y, double *w, double *S,int N, int skip){
         double t1 = S[7]*y[3*skip];
         x[skip]   = S[5]*y[skip] + S[6]*y[2*skip] + t1 + S[8]*y[4*skip] + S[9]*y[5*skip];
         x[2*skip] = S[6]*y[skip] + S[9]*y[2*skip] + t1 - S[5]*y[4*skip] - S[8]*y[5*skip];
-        x[3*skip] = S[7]*y[skip] + S[7]*y[2*skip] - t1 - S[7]*y[4*skip] + S[7]*y[5*skip];
+        x[3*skip] = S[7]*(y[skip] + y[2*skip] - y[3*skip] - y[4*skip] + y[5*skip]);
         x[4*skip] = S[8]*y[skip] - S[5]*y[2*skip] - t1 + S[9]*y[4*skip] - S[6]*y[5*skip];
         x[5*skip] = S[9]*y[skip] - S[8]*y[2*skip] + t1 - S[6]*y[4*skip] + S[5]*y[5*skip];
     } else if (N % 2 == 0){
@@ -210,8 +210,13 @@ int FastUN(double *x, double *y, double *w, double *S,int N, int skip){
         int e2 = FastTN(y-skip,w,x-skip,S,N/2,2*skip);
         int e1 = FastTN(y,w-skip,x,S,N/2,2*skip);
         for (i=1; i<=N/2; i++){
-            x[i*skip] = S[N+i-1]*pow(-1,i+1)*y[(2*i-1)*skip] + S[2*N-i]*y[(2*i)*skip];
-            x[(N+1-i)*skip] = S[2*N-i]*pow(-1,i+1)*y[(2*i-1)*skip] - S[N+i-1]*y[(2*i)*skip];
+            if (i%2==0){
+                x[i*skip] = -S[N+i-1] * y[(2*i-1)*skip] + S[2*N-i]*y[(2*i)*skip];
+                x[(N+1-i)*skip] = -S[2*N-i] * y[(2*i-1)*skip] - S[N+i-1]*y[(2*i)*skip];
+            } else{
+            x[i*skip] = S[N+i-1] * y[(2*i-1)*skip] + S[2*N-i]*y[(2*i)*skip];
+            x[(N+1-i)*skip] = S[2*N-i] * y[(2*i-1)*skip] - S[N+i-1]*y[(2*i)*skip];
+            }
         }
         returnval = (e1==0 && e2==0)? 0 : -1;
     } else{

@@ -79,16 +79,15 @@ poisson2d_data sn_poisson2d(int N, bool analytic){
     //Start Timing
     start = clock();
     gettimeofday(&walltime_s,NULL);
-#pragma omp parallel
-{
+
     //Transform along rows of the grid
-    #pragma omp for
+    #pragma omp parallel for
     for (i=0; i<N-1; i++){
         rv = FastSN(x-i, y-i, w-i, S, N, N-1);
         returnval = (rv==-1 || returnval==-1) ? -1 : 0;
     }
     //Transform along columns of the grid
-    #pragma omp for
+    #pragma omp parallel for
     for (j=0; j<N-1; j++){
         rv = FastSN(y+j*(N-1), x+j*(N-1), w+j*(N-1), S, N, 1);
         returnval = (rv==-1 || returnval==-1) ? -1 : 0;
@@ -96,7 +95,7 @@ poisson2d_data sn_poisson2d(int N, bool analytic){
     //Compute Phi based whether Analytic or FD
     if (analytic){
         double constant = 4. / (N*N * M_PI*M_PI);
-        #pragma omp for
+        #pragma omp parallel for
         for (i=1; i<N; i++){
             for (j=1; j<N; j++){
                 x[(N-1)*(i-1)+j] =  constant * y[(N-1)*(i-1)+j] / (i*i + j*j);
@@ -104,7 +103,7 @@ poisson2d_data sn_poisson2d(int N, bool analytic){
         }
     } else {
         double constant = 4. / (N*N);
-        #pragma omp for
+        #pragma omp parallel for
         for (i=1; i<N; i++){
             for (j=1; j<N; j++){
                 x[(N-1)*(i-1)+j] =  delta*delta * constant * y[(N-1)*(i-1)+j] / (4. - 2.*C[i] - 2.*C[j]);
@@ -112,18 +111,17 @@ poisson2d_data sn_poisson2d(int N, bool analytic){
         }
     }
     //Transform back along columns of the grid
-    #pragma omp for
+    #pragma omp parallel for
     for (j=0; j<N-1; j++){
         rv = FastSN(y+j*(N-1), x+j*(N-1), w+j*(N-1), S, N, 1);
         returnval = (rv==-1 || returnval==-1) ? -1 : 0;
     }
     //Transform back along rows of the grid
-    #pragma omp for nowait
+    #pragma omp parallel for
     for (i=0; i<N-1; i++){
         rv = FastSN(x-i, y-i, w-i, S, N, N-1);
         returnval = (rv==-1 || returnval==-1) ? -1 : 0;
     }
-}
     //Finish timing
     end = clock();
     gettimeofday(&walltime_e,NULL);
