@@ -264,9 +264,8 @@ double ** multiply_square_matrices(double **A, double **B, int N){
     return X;
 }
 /* --------------------------------------------------------------------------- */
-double * multiply_matrix_vector(double **A, double *B, int N){
+void multiply_matrix_vector(double **A, double *B, double *X, int N){
     /* Yadu Bhageria, 00733164, M3SC */
-    double *X = allocate_zero_vector(N);
 
     for (int i=1; i<=N; i++){
         for (int k=1; k<=N; k++){
@@ -277,7 +276,6 @@ double * multiply_matrix_vector(double **A, double *B, int N){
             X[i] = 0.;
         }*/
     }
-    return X;
 }
 /* --------------------------------------------------------------------------- */
 double * add_vectors(double *X, double *Y, double factor, int N){
@@ -291,3 +289,4 @@ double * add_vectors(double *X, double *Y, double factor, int N){
     }
     return Z;
 }
+/* --------------------------------------------------------------------------- */

@@ -40,10 +40,11 @@ int main(void){
 
     for (i=0; i<=15; i++){
         for (j=0; j<3; j++){
+            //Solve Poisson 2D for the exact and non exact cases
             N = (int) N1[j]*pow(2,i);
             Phi_a = sn_poisson2d(N, true);
             Phi_FD = sn_poisson2d(N, false);
-
+            //Print out acquired data
             printf(" %1d*2^%2d |%11d |",N1[j]/(int)pow(2,j), i+j, N);
             printf(" %10.6f | %10.6f | %10.6f |", Phi_FD.maxval, Phi_FD.xpos, Phi_FD.ypos);
             printf(" %10.6f | %10.6f | %10.6f | %10.6f | %10.6f |\n", Phi_a.maxval, Phi_a.xpos, Phi_a.ypos, Phi_a.cpu_time, Phi_a.wall_time);
@@ -137,7 +138,7 @@ poisson2d_data sn_poisson2d(int N, bool analytic){
     data.wall_time = (double)(walltime_e.tv_sec - walltime_s.tv_sec + (walltime_e.tv_usec - walltime_s.tv_usec)/1000000.0);
 
     /*
-    // To print out the contour plot as well
+    // To print out the contour plot
     if (N>=64) contour_print(x,N);
     */
 

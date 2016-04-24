@@ -1,13 +1,10 @@
 CC=gcc
 CFLAGS= -O3 -fopenmp
 
-all: prog_testing.out prog_fast.out prog_2.out prog_4.out prog_5.out
+all: prog_fast.out prog_2.out prog_4.out prog_5.out
 
 debug: CFLAGS += -DDEBUG
-debug: prog_testing.out prog_fast.out prog_2.out prog_4.out prog_5.out
-
-prog_testing.out: testing_program.c matrix_functions.c
-	$(CC) -o prog_testing.out testing_program.c matrix_functions.c $(CFLAGS)
+debug: prog_fast.out prog_2.out prog_4.out prog_5.out
 
 prog_fast.out: test_fast.c matrix_functions.c fast.c
 	$(CC) -o prog_fast.out test_fast.c matrix_functions.c fast.c $(CFLAGS)
