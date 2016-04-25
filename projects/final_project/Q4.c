@@ -31,7 +31,7 @@ int main(void){
         printf(" i |      N     |  DirectSN  |   FastSN   |  Ratio  |\n");
         printf("---|------------|------------|------------|---------|\n");
 
-        for (int i=1; i<=20; i++){
+        for (int i=0; i<=20; i++){
             //Initialize memory and variables needed
             int N = (int) N1*pow(2,i);
             double *x = allocate_zero_vector(N);

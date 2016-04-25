@@ -71,7 +71,7 @@ poisson2d_data sn_poisson2d(int N, bool analytic){
     //Initialize Variables and Memory for Data
     double delta = 1./N;
     int grid_size = (N-1)*(N-1);
-    double *S = SFactors(4*N);
+    double *S = SFactors(N);
     double *x = allocate_zero_vector(grid_size);
     double *w = allocate_zero_vector(grid_size);
     double *y = make_Yvec2D(N,true,-1.);
