@@ -82,8 +82,10 @@ poisson2d_data sn_poisson2d(int N, bool analytic){
     gettimeofday(&walltime_s,NULL);
 
     //Transform along rows of the grid
+    //This is only done from i = N/4 to i = N/2 as all other rows are zero and
+    // so the transform would be zero too.
     #pragma omp parallel for
-    for (i=0; i<N-1; i++){
+    for (i=N-1-N/2; i<N-N/4; i++){
         rv = FastSN(x-i, y-i, w-i, S, N, N-1);
         returnval = (rv==-1 || returnval==-1) ? -1 : 0;
     }
@@ -118,6 +120,8 @@ poisson2d_data sn_poisson2d(int N, bool analytic){
         returnval = (rv==-1 || returnval==-1) ? -1 : 0;
     }
     //Transform back along rows of the grid
+    //This is only done from i = N/4 to i = N/2 as the first transform was
+    // only done from i=N/4 to i=N/2. Also all values outside of this be zero
     #pragma omp parallel for
     for (i=0; i<N-1; i++){
         rv = FastSN(x-i, y-i, w-i, S, N, N-1);
@@ -137,10 +141,10 @@ poisson2d_data sn_poisson2d(int N, bool analytic){
     data.cpu_time = ((double)end-start)/CLOCKS_PER_SEC;
     data.wall_time = (double)(walltime_e.tv_sec - walltime_s.tv_sec + (walltime_e.tv_usec - walltime_s.tv_usec)/1000000.0);
 
-    /*
+/*
     // To print out the contour plot
     if (N>=64) contour_print(x,N);
-    */
+*/
 
     //Free Memory
     free(x);free(y);free(w);free(S);
