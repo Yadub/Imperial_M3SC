@@ -87,13 +87,18 @@ poisson2d_data sn_poisson2d(int N, bool analytic){
     #pragma omp parallel for
     for (i=N-1-N/2; i<N-N/4; i++){
         rv = FastSN(x-i, y-i, w-i, S, N, N-1);
+        #ifdef DEBUG
         returnval = (rv==-1 || returnval==-1) ? -1 : 0;
+        #endif
     }
     //Transform along columns of the grid
     #pragma omp parallel for
     for (j=0; j<N-1; j++){
-        rv = FastSN(y+j*(N-1), x+j*(N-1), w+j*(N-1), S, N, 1);
+        int shift = j*(N-1);
+        rv = FastSN(y+shift, x+shift, w+shift, S, N, 1);
+        #ifdef DEBUG
         returnval = (rv==-1 || returnval==-1) ? -1 : 0;
+        #endif
     }
     //Compute Phi based whether Analytic or FD
     if (analytic){
@@ -116,8 +121,11 @@ poisson2d_data sn_poisson2d(int N, bool analytic){
     //Transform back along columns of the grid
     #pragma omp parallel for
     for (j=0; j<N-1; j++){
-        rv = FastSN(y+j*(N-1), x+j*(N-1), w+j*(N-1), S, N, 1);
+        int shift = j*(N-1);
+        rv = FastSN(y+shift, x+shift, w+shift, S, N, 1);
+        #ifdef DEBUG
         returnval = (rv==-1 || returnval==-1) ? -1 : 0;
+        #endif
     }
     //Transform back along rows of the grid
     //This is only done from i = N/4 to i = N/2 as the first transform was
@@ -125,7 +133,9 @@ poisson2d_data sn_poisson2d(int N, bool analytic){
     #pragma omp parallel for
     for (i=0; i<N-1; i++){
         rv = FastSN(x-i, y-i, w-i, S, N, N-1);
+        #ifdef DEBUG
         returnval = (rv==-1 || returnval==-1) ? -1 : 0;
+        #endif
     }
     //Finish timing
     end = clock();

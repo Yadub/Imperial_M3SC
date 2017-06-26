@@ -18,6 +18,5 @@ prog_2a: prog_2a.c bgauss.c matrix_functions.c
 prog_2b: prog_2b.c bgauss.c matrix_functions.c
 	$(CC) -o prog_2b prog_2b.c bgauss.c matrix_functions.c $(CFLAGS)
 
-
-prog_poisson1d: poisson1d.c bgauss.c matrix_functions.c
-	$(CC) -o prog_poisson1d poisson1d.c bgauss.c matrix_functions.c $(CFLAGS)
+prog_poisson1d: poisson1d.c gauss.c bgauss.c matrix_functions.c
+	$(CC) -o prog_poisson1d poisson1d.c gauss.c bgauss.c matrix_functions.c $(CFLAGS)

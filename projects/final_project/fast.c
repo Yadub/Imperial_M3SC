@@ -64,6 +64,11 @@ int FastSN(double *x, double *y, double *w, double *S,int N, int skip){
     } else if (N==3){
         x[  skip] = S[1] * (y[skip] + y[2*skip]);
         x[2*skip] = S[1] * (y[skip] - y[2*skip]);
+    } else if (N==4){
+        double t1 = S[1] * (y[skip] + y[3*skip]);
+        x[  skip] = t1 + y[2*skip];
+        x[2*skip] = y[skip] - y[3*skip];
+        x[3*skip] = t1 - y[2*skip];
     } else if (N==5){
         double t1, t2;
         t1 = S[1]*y[  skip] + S[2]*y[3*skip];
